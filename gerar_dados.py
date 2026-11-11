@@ -27,7 +27,7 @@ import zipfile
 from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
 
-VERSAO = "1.0.0"
+VERSAO = "1.1.0"
 URLS = (
     "https://portaldatransparencia.gov.br/download-de-dados/{base}/{data}",
     "https://dadosabertos-download.cgu.gov.br/PortalDaTransparencia/saida/{base}/{data}_{BASE}.zip",
@@ -103,8 +103,12 @@ def normalizar(row):
     return {campo: next((por[n] for n in nomes if por.get(n)), "") for campo, nomes in CAMPOS.items()}
 
 
-def gerar(registros_por_base, saida, hoje, origem):
-    """registros_por_base: {"CEIS": [rows], "CNEP": [rows]} -> grava XX.json e meta.json."""
+def gerar(registros_por_base, saida, hoje, origem, data_base=None):
+    """registros_por_base: {"CEIS": [rows], "CNEP": [rows]} -> grava XX.json e meta.json.
+
+    data_base: dia (AAAA-MM-DD) do arquivo do Portal da Transparência. É o que a página mostra
+    como "base de"; sem isso, usa `hoje`.
+    """
     por_prefixo = defaultdict(dict)
     total_sancoes = 0
     for base, rows in registros_por_base.items():
@@ -120,6 +124,8 @@ def gerar(registros_por_base, saida, hoje, origem):
             s = {"b": base, "c": r["categoria"], "o": r["orgao"], "u": r["uf_orgao"], "e": r["esfera"],
                  "i": iso(r["inicio"]), "f": fim, "p": iso(r["publicacao"]), "l": r["fundamentacao"],
                  "a": r["abrangencia"]}
+            if r["processo"]:
+                s["n"] = r["processo"]                     # distingue registros iguais de processos diferentes
             if r["multa"]:
                 s["m"] = r["multa"]
             if s not in empresa["s"]:
@@ -133,7 +139,7 @@ def gerar(registros_por_base, saida, hoje, origem):
         with open(os.path.join(saida, prefixo + ".json"), "w", encoding="utf-8") as f:
             json.dump(por_prefixo.get(prefixo, {}), f, ensure_ascii=False, separators=(",", ":"))
     meta = {"atualizado_em": datetime.now(timezone.utc).isoformat(timespec="minutes"),
-            "data_referencia": hoje.isoformat(), "origem": origem,
+            "data_referencia": hoje.isoformat(), "data_base": data_base or hoje.isoformat(), "origem": origem,
             "empresas": sum(len(v) for v in por_prefixo.values()), "sancoes": total_sancoes, "versao": VERSAO}
     with open(os.path.join(saida, "meta.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=1)
@@ -148,7 +154,7 @@ def main(argv=None):
     p.add_argument("--hoje", help="AAAA-MM-DD (padrão: hoje)")
     a = p.parse_args(argv)
     hoje = datetime.strptime(a.hoje, "%Y-%m-%d").date() if a.hoje else date.today()
-    arquivos, origem = {}, {}
+    arquivos, origem, dias_base = {}, {}, []
     for base in ("ceis", "cnep"):
         arq = getattr(a, base)
         if arq:
@@ -156,8 +162,11 @@ def main(argv=None):
         else:
             arq, dia = baixar(base, "bases", hoje)
             arquivos[base.upper()], origem[base.upper()] = arq, "Portal da Transparência, arquivo de %s" % dia
+            dias_base.append("%s-%s-%s" % (dia[:4], dia[4:6], dia[6:8]))
             print("%s baixado (%s)" % (base.upper(), dia))
-    meta = gerar({b: ler_zip_ou_csv(c) for b, c in arquivos.items()}, a.saida, hoje, origem)
+    # A página informa a data do arquivo mais antigo usado, não a hora (UTC) em que o fluxo rodou.
+    data_base = min(dias_base) if dias_base else None
+    meta = gerar({b: ler_zip_ou_csv(c) for b, c in arquivos.items()}, a.saida, hoje, origem, data_base)
     print("Gerado: %d empresas, %d sanções em %s" % (meta["empresas"], meta["sancoes"], a.saida))
     return 0
 
