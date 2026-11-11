@@ -29,6 +29,15 @@ test("janela de reabilitação igual ao fim da sanção não é apresentada como
   assert.strictEqual(r.caso, "sem_ganho");
   assert.match(r.texto, /se encerra pelo fim do prazo/);
   assert.doesNotMatch(r.texto, /permite pedir/);
+  assert.match(r.texto, /o ponto a examinar é o alcance/);          // não vende reabilitação, mas diz o que vale analisar
+});
+
+test("botão de contato: âncora fica na página; em URL, o CNPJ entra antes do #", () => {
+  assert.strictEqual(c.linkContato("#contato", "11222333000181"), "#contato");
+  assert.strictEqual(c.linkContato("https://rise.dssouza.com/", "11222333000181"),
+    "https://rise.dssouza.com/?cnpj=11222333000181&origem=consulta");
+  assert.strictEqual(c.linkContato("https://rise.dssouza.com/?utm=x#contato", "11222333000181"),
+    "https://rise.dssouza.com/?utm=x&cnpj=11222333000181&origem=consulta#contato");
 });
 
 test("impedimento de 3 anos da Lei 14.133: reabilitação em 1 ano e ganho em meses", () => {

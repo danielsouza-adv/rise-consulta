@@ -148,7 +148,9 @@
     var j = maisAnos(ini, t === "impedimento" ? 1 : 3);
     if (fim && dias(j, fim) <= 30) return { caso: "sem_ganho", quando: j,
       texto: "Esta sanção termina em " + br(fim) + ", junto ou antes do prazo mínimo para pedir a reabilitação (" + br(j) +
-             "). Na prática, a restrição se encerra pelo fim do prazo." };
+             "): aqui, a restrição se encerra pelo fim do prazo." +
+             (t === "impedimento" ? " Até lá, o ponto a examinar é o alcance: em regra, ela só vale perante o ente que a aplicou, " +
+              "e a empresa pode disputar contratos dos demais." : "") };
     var ganho = fim ? Math.floor(dias(j > hoje ? j : hoje, fim) / 30) : 0;
     var antecipa = ganho >= 1 ? " Deferida, antecipa o retorno em até " + ganho + (ganho === 1 ? " mês." : " meses.") : "";
     if (j <= hoje) return { caso: "aberta", quando: j,
@@ -202,9 +204,16 @@
     return lista.length + " registros vigentes: " + partes.join(", ") + ".";
   }
 
+  /** Destino do botão de contato. "#secao" fica na mesma página; em URL, o CNPJ entra antes do "#". */
+  function linkContato(contato, cnpj) {
+    if (contato.charAt(0) === "#") return contato;
+    var i = contato.indexOf("#"), base = i >= 0 ? contato.slice(0, i) : contato, hash = i >= 0 ? contato.slice(i) : "";
+    return base + (base.indexOf("?") >= 0 ? "&" : "?") + "cnpj=" + cnpj + "&origem=consulta" + hash;
+  }
+
   var API = { cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
               leiLicitacao: leiLicitacao, nome: nome, alcance: alcance, excesso: excesso, reabilitacao: reabilitacao,
-              linhaDoTempo: linhaDoTempo, prazo: prazo, veredito: veredito, resumo: resumo, data: data };
+              linhaDoTempo: linhaDoTempo, prazo: prazo, linkContato: linkContato, veredito: veredito, resumo: resumo, data: data };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   if (typeof document === "undefined") return;
 
@@ -212,81 +221,81 @@
 
   var SCRIPT = document.currentScript;
   var BASE = (SCRIPT && SCRIPT.src ? SCRIPT.src.replace(/[^/]*$/, "") : "./") + "dados/";
-  var FONTE = "https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&display=swap";
+  var FONTE = "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap";
 
   var CSS = [
     /* tinta, papel e ouro: as mesmas três matérias de um documento oficial */
-    ".rc{--rc-ink:#0e1b2e;--rc-ink2:#1a2c47;--rc-gold:#b8934a;--rc-goldtx:#7d5e22;--rc-paper:#fff;--rc-wash:#f4f6f9;--rc-line:#dde3ea;",
-    "--rc-tx:#1b2533;--rc-mut:#566174;--rc-red:#8f2a2a;--rc-redbg:#fbf1f0;--rc-yel:#7a5200;--rc-yelbg:#fff8e8;--rc-grn:#1d6341;--rc-grnbg:#eef7f1;",
-    "--rc-serif:'Spectral','Iowan Old Style','Palatino Linotype',Georgia,serif;",
-    "all:revert;display:block;box-sizing:border-box;max-width:780px;margin:32px auto;font-family:inherit;font-size:16px;line-height:1.55;color:var(--rc-tx);",
-    "background:var(--rc-paper);border:1px solid var(--rc-line);border-radius:6px;overflow:hidden;box-shadow:0 30px 60px -38px rgba(14,27,46,.45);text-align:left}",
+    ".rc{--rc-ink:#000;--rc-ink2:#1a1a1a;--rc-gold:#c8a96e;--rc-goldtx:#7a5c1e;--rc-paper:#fff;--rc-wash:#f7f4ee;--rc-line:#e2dccd;",
+    "--rc-tx:#1a2b3c;--rc-mut:#5b6b78;--rc-red:#8f2a2a;--rc-redbg:#fbf1f0;--rc-yel:#7a5200;--rc-yelbg:#fff8e8;--rc-grn:#1d6341;--rc-grnbg:#eef7f1;",
+    "--rc-serif:'Playfair Display','Iowan Old Style','Palatino Linotype',Georgia,serif;",
+    "all:revert;display:block;box-sizing:border-box;max-width:780px;margin:32px auto;font-family:var(--rc-font,inherit);font-size:var(--rc-size,16px);line-height:1.55;color:var(--rc-tx);",
+    "background:var(--rc-paper);border:1px solid var(--rc-line);border-radius:6px;overflow:hidden;box-shadow:0 30px 60px -38px rgba(0,0,0,.55);text-align:left}",
     ".rc *,.rc *::before,.rc *::after{box-sizing:border-box}",
     ".rc :where(p,h3,h4,dl,dd,dt){margin:0;padding:0}",
 
     /* cabeçalho */
     ".rc-topo{background:var(--rc-ink);color:#fff;padding:30px 32px 28px;border-bottom:3px solid var(--rc-gold)}",
-    ".rc h3.rc-tit{font-family:var(--rc-serif);font-weight:500;font-size:27px;line-height:1.2;letter-spacing:-.005em;color:#fff}",
-    ".rc-topo .rc-sub{color:#b9c3d3;font-size:15px;margin-top:8px;max-width:56ch}",
+    ".rc h3.rc-tit{font-family:var(--rc-serif);font-weight:600;font-size:1.688em;line-height:1.2;color:#fff}",
+    ".rc-topo .rc-sub{color:#c9c9c9;font-size:0.938em;margin-top:8px;max-width:56ch}",
     ".rc-form{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}",
-    ".rc-form input{flex:1 1 250px;min-width:0;font:inherit;font-size:18px;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:var(--rc-ink);",
+    ".rc-form input{flex:1 1 250px;min-width:0;font:inherit;font-size:1.125em;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:var(--rc-ink);",
     "background:#fff;border:1px solid transparent;border-radius:4px;padding:13px 15px;margin:0;height:auto;box-shadow:none}",
     ".rc-form input::placeholder{color:#9aa5b5}",
-    ".rc-btn{font:inherit;font-size:16px;font-weight:600;line-height:1.2;padding:14px 24px;border-radius:4px;border:1px solid var(--rc-gold);background:var(--rc-gold);",
+    ".rc-btn{font:inherit;font-size:1em;font-weight:600;line-height:1.2;padding:14px 24px;border-radius:4px;border:1px solid var(--rc-gold);background:var(--rc-gold);",
     "color:var(--rc-ink);cursor:pointer;text-decoration:none;display:inline-block;text-align:center;transition:background .15s,border-color .15s}",
-    ".rc-btn:hover{background:#c9a55c;border-color:#c9a55c;color:var(--rc-ink)}",
+    ".rc-btn:hover{background:#e8cc7a;border-color:#e8cc7a;color:var(--rc-ink)}",
     ".rc-btn.rc-sec{background:transparent;color:#fff;border-color:rgba(255,255,255,.45)}.rc-btn.rc-sec:hover{border-color:#fff;background:transparent;color:#fff}",
     ".rc-form input:focus-visible,.rc-btn:focus-visible,.rc summary:focus-visible{outline:2px solid var(--rc-gold);outline-offset:2px}",
-    ".rc-msg{color:#ffd9d4;font-size:15px;margin-top:10px;min-height:0}.rc-msg:empty{display:none}",
+    ".rc-msg{color:#ffd9d4;font-size:0.938em;margin-top:10px;min-height:0}.rc-msg:empty{display:none}",
 
     /* resultado */
     ".rc-res:empty{display:none}.rc-res{padding:28px 32px 4px}",
     ".rc-carga{color:var(--rc-mut)}",
     ".rc-ver{padding:16px 18px;border-left:4px solid;border-radius:0 4px 4px 0}",
     ".rc-ver.r{background:var(--rc-redbg);border-color:var(--rc-red)}.rc-ver.y{background:var(--rc-yelbg);border-color:#c08a12}.rc-ver.g{background:var(--rc-grnbg);border-color:var(--rc-grn)}",
-    ".rc-ver strong{display:block;font-family:var(--rc-serif);font-weight:600;font-size:20px;line-height:1.3}",
+    ".rc-ver strong{display:block;font-family:var(--rc-serif);font-weight:600;font-size:1.25em;line-height:1.3}",
     ".rc-ver.r strong{color:var(--rc-red)}.rc-ver.y strong{color:var(--rc-yel)}.rc-ver.g strong{color:var(--rc-grn)}",
-    ".rc-ver span{display:block;margin-top:4px;font-size:15px}",
+    ".rc-ver span{display:block;margin-top:4px;font-size:0.938em}",
     ".rc-emp{margin-top:24px;padding-bottom:16px;border-bottom:1px solid var(--rc-ink)}",
-    ".rc-emp b{display:block;font-family:var(--rc-serif);font-weight:600;font-size:22px;line-height:1.25;color:var(--rc-ink)}",
-    ".rc-emp span{display:block;color:var(--rc-mut);font-size:15px;font-variant-numeric:tabular-nums;margin-top:2px}",
-    ".rc-emp em{display:block;font-style:normal;font-size:15px;margin-top:10px}",
+    ".rc-emp b{display:block;font-family:var(--rc-serif);font-weight:600;font-size:1.375em;line-height:1.25;color:var(--rc-ink)}",
+    ".rc-emp span{display:block;color:var(--rc-mut);font-size:0.938em;font-variant-numeric:tabular-nums;margin-top:2px}",
+    ".rc-emp em{display:block;font-style:normal;font-size:0.938em;margin-top:10px}",
 
     /* cada registro é uma entrada de um extrato, não um cartão */
     ".rc-reg{padding:22px 0;border-bottom:1px solid var(--rc-line)}",
     ".rc-cab{display:flex;justify-content:space-between;align-items:baseline;gap:12px}",
-    ".rc h4.rc-nome{font-family:var(--rc-serif);font-weight:600;font-size:18px;line-height:1.3;color:var(--rc-ink)}",
-    ".rc-base{flex:none;font-size:13px;color:var(--rc-mut);border:1px solid var(--rc-line);border-radius:3px;padding:1px 7px}",
-    ".rc-dl{display:grid;grid-template-columns:150px 1fr;gap:6px 16px;margin-top:12px;font-size:15px}",
+    ".rc h4.rc-nome{font-family:var(--rc-serif);font-weight:600;font-size:1.125em;line-height:1.3;color:var(--rc-ink)}",
+    ".rc-base{flex:none;font-size:0.812em;color:var(--rc-mut);border:1px solid var(--rc-line);border-radius:3px;padding:1px 7px}",
+    ".rc-dl{display:grid;grid-template-columns:150px 1fr;gap:6px 16px;margin-top:12px;font-size:0.938em}",
     ".rc-dl dt{color:var(--rc-mut)}",
 
     /* linha do tempo: decorrido em tinta, janela de reabilitação em ouro */
     ".rc-lt{margin-top:18px}",
-    ".rc-lt-m{position:relative;height:20px;font-size:13px;color:var(--rc-goldtx);font-weight:600}",
+    ".rc-lt-m{position:relative;height:20px;font-size:0.812em;color:var(--rc-goldtx);font-weight:600}",
     ".rc-lt-m span{position:absolute;bottom:2px;white-space:nowrap;transform:translateX(-50%)}",
     ".rc-lt-m span.e{transform:none}.rc-lt-m span.d{transform:translateX(-100%)}",
-    ".rc-lt-t{position:relative;height:6px;background:#e3e8ef;border-radius:3px}",
-    ".rc-lt-t.a{border-radius:3px 0 0 3px;background:linear-gradient(90deg,#e3e8ef 70%,rgba(227,232,239,0))}",
+    ".rc-lt-t{position:relative;height:6px;background:#e6e0d2;border-radius:3px}",
+    ".rc-lt-t.a{border-radius:3px 0 0 3px;background:linear-gradient(90deg,#e6e0d2 70%,rgba(230,224,210,0))}",
     ".rc-lt-t i{position:absolute;left:0;top:0;bottom:0;background:var(--rc-ink2);border-radius:3px}",
     ".rc-lt-t b{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;background:var(--rc-gold);border:2px solid #fff;transform:rotate(45deg)}",
-    ".rc-lt-d{display:flex;justify-content:space-between;font-size:13px;color:var(--rc-mut);margin-top:6px;font-variant-numeric:tabular-nums}",
+    ".rc-lt-d{display:flex;justify-content:space-between;font-size:0.812em;color:var(--rc-mut);margin-top:6px;font-variant-numeric:tabular-nums}",
 
-    ".rc-nota{margin-top:14px;padding:12px 14px;background:var(--rc-wash);border-left:3px solid var(--rc-gold);font-size:15px}",
-    ".rc-nota.s{border-left-color:#b6bfcc}",
-    ".rc-alerta{margin-top:10px;padding:12px 14px;background:var(--rc-yelbg);border-left:3px solid #c08a12;font-size:15px}",
+    ".rc-nota{margin-top:14px;padding:12px 14px;background:var(--rc-wash);border-left:3px solid var(--rc-gold);font-size:0.938em}",
+    ".rc-nota.s{border-left-color:#bdb49f}",
+    ".rc-alerta{margin-top:10px;padding:12px 14px;background:var(--rc-yelbg);border-left:3px solid #c08a12;font-size:0.938em}",
     ".rc-alerta b{color:var(--rc-yel)}",
-    ".rc details{margin-top:12px;font-size:14px}",
+    ".rc details{margin-top:12px;font-size:0.875em}",
     ".rc summary{cursor:pointer;color:var(--rc-goldtx);font-weight:600;width:fit-content}",
     ".rc details p{margin-top:8px;color:var(--rc-mut);line-height:1.6}",
 
     /* chamada */
     ".rc-cta{margin:26px -32px 0;padding:26px 32px;background:var(--rc-ink);color:#fff;display:flex;gap:14px 20px;flex-wrap:wrap;align-items:center}",
-    ".rc-cta p{flex:1 1 280px;font-family:var(--rc-serif);font-weight:500;font-size:19px;line-height:1.35;color:#fff}",
+    ".rc-cta p{flex:1 1 280px;font-family:var(--rc-serif);font-weight:600;font-size:1.188em;line-height:1.35;color:#fff}",
     ".rc-cta .rc-acoes{display:flex;gap:10px;flex-wrap:wrap}",
-    ".rc-aviso{padding:18px 32px 22px;font-size:13px;line-height:1.55;color:var(--rc-mut)}",
+    ".rc-aviso{padding:18px 32px 22px;font-size:0.812em;line-height:1.55;color:var(--rc-mut)}",
 
-    "@media (max-width:560px){.rc{margin:20px auto}.rc-topo{padding:24px 20px 22px}.rc h3.rc-tit{font-size:23px}.rc-res{padding:22px 20px 4px}",
-    ".rc-dl{grid-template-columns:1fr;gap:2px}.rc-dl dt{margin-top:8px;font-size:13px}.rc-cta{margin:22px -20px 0;padding:22px 20px}.rc-aviso{padding:16px 20px 20px}",
+    "@media (max-width:560px){.rc{margin:20px auto}.rc-topo{padding:24px 20px 22px}.rc h3.rc-tit{font-size:1.438em}.rc-res{padding:22px 20px 4px}",
+    ".rc-dl{grid-template-columns:1fr;gap:2px}.rc-dl dt{margin-top:8px;font-size:0.812em}.rc-cta{margin:22px -20px 0;padding:22px 20px}.rc-aviso{padding:16px 20px 20px}",
     ".rc-btn{flex:1 1 auto}.rc-cta .rc-acoes{width:100%}}",
     "@media (prefers-reduced-motion:reduce){.rc-btn{transition:none}}"
   ].join("");
@@ -379,7 +388,7 @@
       if (emp) h += '<div class="rc-emp"><b>' + esc(emp.n) + '</b><span>CNPJ ' + esc(mascara(c)) + '</span>' + (rs ? '<em>' + esc(rs) + '</em>' : "") + '</div>';
       lista.forEach(function (s) { h += htmlRegistro(s, hoje); });
       if (lista.length) {
-        var url = contato + (contato.indexOf("?") >= 0 ? "&" : "?") + "cnpj=" + c + "&origem=consulta";
+        var url = linkContato(contato, c);
         h += '<div class="rc-cta"><p>O que estes registros significam para os seus contratos, e qual o caminho para voltar a licitar.</p>' +
           '<div class="rc-acoes"><a class="rc-btn rc-cta-link" href="' + esc(url) + '">Pedir análise do caso</a>' +
           (whats ? '<a class="rc-btn rc-sec rc-cta-whats" target="_blank" rel="noopener" href="https://wa.me/' + whats +
@@ -387,6 +396,9 @@
           '</div></div>';
       }
       res.innerHTML = h;
+      /* A página que hospeda a consulta pode ouvir o resultado (por exemplo, para preencher o formulário). */
+      try { document.dispatchEvent(new CustomEvent("consulta-rise:resultado", { detail: { cnpj: c, empresa: emp ? emp.n : "",
+        registros: lista.length, tipos: lista.map(function (s) { return tipo(s.c); }) } })); } catch (e) {}
       Array.prototype.forEach.call(res.querySelectorAll(".rc-cta a"), function (a) {
         a.addEventListener("click", function () { evento("clique_contato_consulta", { canal: a.classList.contains("rc-cta-whats") ? "whatsapp" : "formulario" }); });
       });

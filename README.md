@@ -21,10 +21,10 @@ Opções no `<div>`:
 
 | Atributo | Para quê |
 | --- | --- |
-| `data-contato` | Link do botão "Falar com um advogado" (recebe `?cnpj=...&origem=consulta`) |
+| `data-contato` | Destino do botão "Pedir análise do caso". URL recebe `?cnpj=...&origem=consulta`; uma âncora (`#contato`) rola a própria página |
 | `data-whatsapp` | Número com DDI e DDD, só dígitos (ex.: `5561999999999`), para mostrar o botão de WhatsApp |
 | `data-titulo` | Título do bloco |
-| `data-fontes="nao"` | Não carrega a fonte Spectral do Google Fonts (os títulos usam a serifada do sistema) |
+| `data-fontes="nao"` | Não carrega a fonte Playfair Display do Google Fonts (os títulos usam a serifada do sistema) |
 
 Se o Google Analytics 4 estiver no site, a consulta registra os eventos `consulta_elegibilidade` (com ou sem sanção, sem o CNPJ) e `clique_contato_consulta`.
 
@@ -37,6 +37,11 @@ Se o Google Analytics 4 estiver no site, a consulta registra os eventos `consult
 - **Número do processo**, para distinguir registros iguais de processos diferentes.
 
 As regras ficam na primeira metade de `site/consulta-rise.js` e são cobertas por `tests/test_consulta.js`. Ao mudar uma regra, mude o teste junto.
+
+## Integração com a página que hospeda
+
+- Cores e tamanho podem ser ajustados por CSS na página: `#consulta-rise{--rc-ink:#000;--rc-gold:#c8a96e;--rc-size:19px;--rc-font:inherit}`.
+- A cada consulta, a página recebe o evento `consulta-rise:resultado` em `document`, com `detail = {cnpj, empresa, registros, tipos}`. A LP do R.I.S.E. usa isso para preencher o formulário.
 
 ## Atualização dos dados
 
