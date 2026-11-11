@@ -46,7 +46,10 @@ Sim. A busca é feita no seu próprio navegador sobre os dados públicos do Port
 A consulta cobre o CEIS e o CNEP. Outros cadastros, como a lista de inidôneos do TCU, o SICAF e cadastros estaduais, não estão incluídos.
 
 **A sanção acaba sozinha no fim do prazo?**
-Sim, ao fim do prazo a restrição deixa de valer. A reabilitação permite antecipar esse retorno, quando os requisitos estão cumpridos.
+Depende da sanção. Impedimento e suspensão têm prazo certo e deixam de valer quando ele termina; a reabilitação permite antecipar esse retorno, quando os requisitos estão cumpridos. Já a declaração de inidoneidade aplicada com base na Lei 8.666/1993 costuma ser registrada sem data final: ela vale até a reabilitação, que pode ser requerida após 2 anos da aplicação (art. 87, IV e §3º).
+
+**O que significa o aviso "prazo acima do previsto em lei"?**
+A consulta compara a duração registrada com o máximo que a lei admite para aquela sanção. Quando o registro ultrapassa esse limite, pode haver erro de cadastro ou excesso no ato punitivo. Nos dois casos, vale conferir a decisão.
 
 ---
 
