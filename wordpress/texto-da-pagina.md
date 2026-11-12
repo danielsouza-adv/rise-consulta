@@ -22,7 +22,7 @@ O **CEIS** (Cadastro Nacional de Empresas Inidôneas e Suspensas) reúne as empr
 
 - **Impedimento de licitar e contratar** (Lei 14.133, art. 156, III): em regra, vale só perante a Administração do ente que aplicou a sanção (a União, o estado ou o município) e dura até 3 anos.
 - **Declaração de inidoneidade** (art. 156, IV): vale perante toda a Administração Pública, de todos os entes, e dura de 3 a 6 anos.
-- **Suspensão** (Lei 8.666/1993, art. 87, III): sanção da lei anterior, em regra restrita ao órgão ou entidade que a aplicou.
+- **Suspensão** (Lei 8.666/1993, art. 87, III): sanção da antiga Lei de Licitações, revogada pela Lei 14.133/2021 mas ainda aplicável aos contratos firmados sob ela (art. 190). Em regra, restrita ao órgão ou entidade que a aplicou.
 - **Multa da Lei Anticorrupção**: por si só, não impede a empresa de licitar.
 
 ## Quando é possível pedir a reabilitação
@@ -46,10 +46,18 @@ Sim. A busca é feita no seu próprio navegador sobre os dados públicos do Port
 A consulta cobre o CEIS e o CNEP. Outros cadastros, como a lista de inidôneos do TCU, o SICAF e cadastros estaduais, não estão incluídos.
 
 **A sanção acaba sozinha no fim do prazo?**
-Depende da sanção. Impedimento e suspensão têm prazo certo e deixam de valer quando ele termina; a reabilitação permite antecipar esse retorno, quando os requisitos estão cumpridos. Já a declaração de inidoneidade aplicada com base na Lei 8.666/1993 costuma ser registrada sem data final: ela vale até a reabilitação, que pode ser requerida após 2 anos da aplicação (art. 87, IV e §3º).
+Depende da sanção. Impedimento e suspensão têm prazo certo e deixam de valer quando ele termina; a reabilitação permite antecipar esse retorno, quando os requisitos estão cumpridos. Já a declaração de inidoneidade aplicada com base na antiga Lei 8.666/1993 costuma ser registrada sem data final: ela vale até a reabilitação, que pode ser requerida após 2 anos da aplicação (art. 87, IV e §3º). A lei foi revogada, mas as sanções aplicadas na vigência dela continuam valendo.
 
 **O que significa o aviso "prazo acima do previsto em lei"?**
 A consulta compara a duração registrada com o máximo que a lei admite para aquela sanção. Quando o registro ultrapassa esse limite, pode haver erro de cadastro ou excesso no ato punitivo. Nos dois casos, vale conferir a decisão.
+
+## Apareceu uma sanção. E agora?
+
+O cadastro mostra o registro; ele não diz o que a empresa pode fazer a partir de hoje. Em muitos casos, a sanção alcança apenas um ente federativo, e a empresa segue apta a disputar contratos dos demais. Em outros, a reabilitação pode ser pedida antes do fim do prazo e devolver até dois anos de licitações.
+
+Essas duas respostas vêm da leitura do ato punitivo e do processo, não do cadastro.
+
+[**Veja o caminho para voltar a licitar**](https://rise.dssouza.com) · WhatsApp (61) 99878-0564
 
 ---
 
