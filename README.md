@@ -41,6 +41,7 @@ As regras ficam na primeira metade de `site/consulta-rise.js` e são cobertas po
 
 ## Integração com a página que hospeda
 
+- O navegador guarda o `consulta-rise.js` por cerca de 10 minutos. Para forçar a versão nova numa página já publicada, acrescente ou troque o `?v=` no fim do endereço do script.
 - Se a consulta exibir "não consegui alcançar a base de dados", o endereço dos dados ficou errado: veja a mensagem `[consulta-rise]` no console do navegador e, se preciso, fixe o caminho com `data-dados`.
 - Cores e tamanho podem ser ajustados por CSS na página: `#consulta-rise{--rc-ink:#000;--rc-gold:#c8a96e;--rc-size:19px;--rc-font:inherit}`.
 - A cada consulta, a página recebe o evento `consulta-rise:resultado` em `document`, com `detail = {cnpj, empresa, registros, tipos}`. A LP do R.I.S.E. usa isso para preencher o formulário.
