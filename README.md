@@ -24,6 +24,7 @@ Opções no `<div>`:
 | `data-contato` | Destino do botão "Pedir análise do caso". URL recebe `?cnpj=...&origem=consulta`; uma âncora (`#contato`) rola a própria página |
 | `data-whatsapp` | Número com DDI e DDD, só dígitos (ex.: `5561999999999`), para mostrar o botão de WhatsApp |
 | `data-titulo` | Título do bloco |
+| `data-dados` | Pasta dos arquivos de dados, com barra no fim. Sem isso, sai do endereço do script; informe quando um construtor de página reinjetar o script |
 | `data-fontes="nao"` | Não carrega a fonte Playfair Display do Google Fonts (os títulos usam a serifada do sistema) |
 
 Se o Google Analytics 4 estiver no site, a consulta registra os eventos `consulta_elegibilidade` (com ou sem sanção, sem o CNPJ) e `clique_contato_consulta`.
@@ -40,6 +41,7 @@ As regras ficam na primeira metade de `site/consulta-rise.js` e são cobertas po
 
 ## Integração com a página que hospeda
 
+- Se a consulta exibir "não consegui alcançar a base de dados", o endereço dos dados ficou errado: veja a mensagem `[consulta-rise]` no console do navegador e, se preciso, fixe o caminho com `data-dados`.
 - Cores e tamanho podem ser ajustados por CSS na página: `#consulta-rise{--rc-ink:#000;--rc-gold:#c8a96e;--rc-size:19px;--rc-font:inherit}`.
 - A cada consulta, a página recebe o evento `consulta-rise:resultado` em `document`, com `detail = {cnpj, empresa, registros, tipos}`. A LP do R.I.S.E. usa isso para preencher o formulário.
 

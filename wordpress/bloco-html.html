@@ -1,8 +1,13 @@
-<!-- Cole num bloco "HTML personalizado" do WordPress, onde a consulta deve aparecer. -->
+<!-- Cole num bloco "HTML personalizado" (ou no widget HTML do Elementor), onde a consulta deve aparecer. -->
 <div id="consulta-rise"
      data-contato="https://rise.dssouza.com/"
-     data-whatsapp="5561998780564"></div>
+     data-whatsapp="5561998780564"
+     data-dados="https://danielsouza-adv.github.io/rise-consulta/dados/"></div>
 <script src="https://danielsouza-adv.github.io/rise-consulta/consulta-rise.js" defer></script>
+
+<!-- data-dados diz onde estão os dados. Sem ele a ferramenta descobre sozinha, mas construtores de
+     página às vezes reinjetam o script e atrapalham essa descoberta; com ele, não há como errar.
+     Quando a página tiver o seu próprio formulário, troque data-contato por "#contato". -->
 
 <!-- Opcional: ajusta tamanho e cores sem mexer na ferramenta.
 <style>#consulta-rise{--rc-size:17px;--rc-ink:#000;--rc-gold:#C8A96E}</style>
