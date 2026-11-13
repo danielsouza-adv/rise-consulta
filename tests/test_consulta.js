@@ -117,6 +117,16 @@ test("linha do tempo: marca da reabilitação entre início e fim; sem marca qua
   assert.ok(d.marca > 60 && d.marca < 70);
 });
 
+test("pasta dos dados sai do endereço do script, com ou sem ?ver=", () => {
+  assert.strictEqual(c.baseDeScript("https://x.github.io/rise-consulta/consulta-rise.js"),
+    "https://x.github.io/rise-consulta/dados/");
+  assert.strictEqual(c.baseDeScript("https://x.github.io/rise-consulta/consulta-rise.js?ver=1.1.0"),
+    "https://x.github.io/rise-consulta/dados/");
+  assert.strictEqual(c.baseDeScript("https://x.github.io/rise-consulta/consulta-rise.js#x"),
+    "https://x.github.io/rise-consulta/dados/");
+  assert.strictEqual(c.baseDeScript("/js/consulta-rise.js"), "/js/dados/");
+});
+
 test("CNPJ: validação e máscara", () => {
   assert.ok(c.cnpjValido("31797544000150"));
   assert.ok(!c.cnpjValido("31797544000151"));

@@ -211,7 +211,12 @@
     return base + (base.indexOf("?") >= 0 ? "&" : "?") + "cnpj=" + cnpj + "&origem=consulta" + hash;
   }
 
-  var API = { cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
+  /** Pasta dos dados a partir do endereço do script (ignora ?ver= que o WordPress acrescenta). */
+  function baseDeScript(src) {
+    return String(src || "").split("?")[0].split("#")[0].replace(/[^/]*$/, "") + "dados/";
+  }
+
+  var API = { baseDeScript: baseDeScript, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
               leiLicitacao: leiLicitacao, nome: nome, alcance: alcance, excesso: excesso, reabilitacao: reabilitacao,
               linhaDoTempo: linhaDoTempo, prazo: prazo, linkContato: linkContato, veredito: veredito, resumo: resumo, data: data };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
@@ -219,8 +224,21 @@
 
   /* ------------------------------------------------------------------ tela */
 
-  var SCRIPT = document.currentScript;
-  var BASE = (SCRIPT && SCRIPT.src ? SCRIPT.src.replace(/[^/]*$/, "") : "./") + "dados/";
+  var SCRIPT = document.currentScript;          /* precisa ser lido aqui, no topo */
+  var PADRAO = "https://danielsouza-adv.github.io/rise-consulta/dados/";
+
+  /* Onde buscar os dados. Construtores de página e otimizadores às vezes reinjetam o script,
+     e nesse caso document.currentScript é nulo: daí os três caminhos. data-dados tem a palavra final. */
+  function baseDados(raiz) {
+    var d = raiz && raiz.getAttribute("data-dados");
+    if (d) return d.replace(/\/?$/, "/");
+    var s = SCRIPT && SCRIPT.src ? SCRIPT : null;
+    if (!s) {
+      var t = document.querySelectorAll('script[src*="consulta-rise"]');
+      s = t.length ? t[t.length - 1] : null;
+    }
+    return s && s.src ? baseDeScript(s.src) : PADRAO;
+  }
   var FONTE = "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap";
 
   var CSS = [
@@ -297,7 +315,19 @@
     "@media (max-width:560px){.rc{margin:20px auto}.rc-topo{padding:24px 20px 22px}.rc h3.rc-tit{font-size:1.438em}.rc-res{padding:22px 20px 4px}",
     ".rc-dl{grid-template-columns:1fr;gap:2px}.rc-dl dt{margin-top:8px;font-size:0.812em}.rc-cta{margin:22px -20px 0;padding:22px 20px}.rc-aviso{padding:16px 20px 20px}",
     ".rc-btn{flex:1 1 auto}.rc-cta .rc-acoes{width:100%}}",
-    "@media (prefers-reduced-motion:reduce){.rc-btn{transition:none}}"
+    "@media (prefers-reduced-motion:reduce){.rc-btn{transition:none}}",
+
+    /* Blindagem: temas de site (Elementor e afins) estilizam button e input por conta própria.
+       Estas regras repetem o essencial com especificidade maior, para vencer sem !important. */
+    ".rc .rc-btn{font-family:inherit;font-size:1em;font-weight:600;line-height:1.2;padding:14px 24px;",
+    "background:var(--rc-gold);color:var(--rc-ink);border:1px solid var(--rc-gold);border-radius:4px;",
+    "box-shadow:none;text-transform:none;letter-spacing:normal;text-decoration:none;width:auto;min-width:0;height:auto;opacity:1}",
+    ".rc .rc-btn:hover{background:#e8cc7a;border-color:#e8cc7a;color:var(--rc-ink)}",
+    ".rc .rc-btn.rc-sec{background:transparent;color:#fff;border-color:rgba(255,255,255,.45)}",
+    ".rc .rc-btn.rc-sec:hover{background:transparent;color:#fff;border-color:#fff}",
+    ".rc .rc-form input{font-family:inherit;font-size:1.125em;background:#fff;color:var(--rc-ink);",
+    "border:1px solid transparent;border-radius:4px;box-shadow:none;height:auto;line-height:normal;margin:0}",
+    ".rc .rc-aviso a,.rc .rc-nota a,.rc .rc-alerta a{color:var(--rc-goldtx)}"
   ].join("");
 
   function evento(nomeEv, params) { try { if (window.gtag) window.gtag("event", nomeEv, params || {}); } catch (e) {} }
@@ -356,9 +386,9 @@
       'A consulta é feita no seu navegador: o CNPJ digitado não é enviado nem armazenado. As informações têm caráter ' +
       'informativo e não substituem a leitura do ato punitivo nem a análise jurídica do caso.</p>';
     var input = raiz.querySelector("input"), msg = raiz.querySelector(".rc-msg"), res = raiz.querySelector(".rc-res");
-    var cache = {};
+    var base = baseDados(raiz), cache = {};
 
-    fetch(BASE + "meta.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (m) {
+    fetch(base + "meta.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (m) {
       var d = data((m.data_base || m.data_referencia || "").slice(0, 10));
       if (d) raiz.querySelector(".rc-atual").textContent = ", base de " + br(d);
     }).catch(function () {});
@@ -371,11 +401,14 @@
       if (!cnpjValido(c)) { msg.textContent = "Este CNPJ não é válido. Confira os 14 dígitos."; return; }
       res.innerHTML = '<p class="rc-carga">Consultando…</p>';
       var pref = c.slice(0, 2);
-      var p = cache[pref] || (cache[pref] = fetch(BASE + pref + ".json").then(function (r) {
-        if (!r.ok) throw new Error(r.status); return r.json();
+      var url = base + pref + ".json";
+      var p = cache[pref] || (cache[pref] = fetch(url).then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status); return r.json();
       }));
-      p.then(function (base) { mostrar(c, base[c]); }).catch(function () {
-        delete cache[pref]; res.innerHTML = ""; msg.textContent = "A base não respondeu. Tente consultar de novo em instantes.";
+      p.then(function (dados) { mostrar(c, dados[c]); }).catch(function (e) {
+        delete cache[pref]; res.innerHTML = "";
+        msg.textContent = "Não consegui alcançar a base de dados. Tente de novo em instantes.";
+        if (window.console) console.error("[consulta-rise] falhou ao buscar " + url, e);
       });
     });
 
