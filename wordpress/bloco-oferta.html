@@ -1,0 +1,235 @@
+<!--
+  Bloco "Parecer de Elegibilidade" — cole num bloco HTML personalizado (ou no widget HTML do
+  Elementor) no FIM da página, depois do texto. Funciona sozinho; se a consulta estiver na mesma
+  página, o formulário se preenche com o CNPJ, a empresa e a situação assim que alguém consulta.
+
+  Para o botão da consulta rolar até aqui, use data-contato="#contato" no bloco da consulta.
+-->
+<section class="ofr" id="contato">
+  <div class="ofr-caixa">
+
+    <p class="ofr-olho">Parecer de Elegibilidade</p>
+    <h2 class="ofr-tit">Em cinco dias, você sabe se a sua empresa pode voltar a licitar antes do prazo.</h2>
+    <p class="ofr-lead">A consulta acima mostra o registro. O parecer lê o ato punitivo e o processo, e entrega por
+      escrito o caminho para a empresa voltar a vender ao setor público.</p>
+
+    <div class="ofr-grade">
+      <div>
+        <h3 class="ofr-sub">O que o parecer responde</h3>
+        <ol class="ofr-itens">
+          <li><span><b>Onde a empresa já pode licitar hoje.</b> O alcance real de cada sanção, por ente e por órgão.</span></li>
+          <li><span><b>Quando a reabilitação pode ser pedida.</b> A data, a autoridade competente e o rito.</span></li>
+          <li><span><b>O que falta cumprir.</b> Reparação do dano, multa, condições do ato e, quando a lei exige, programa de integridade.</span></li>
+          <li><span><b>Se a sanção pode ser reduzida ou revista.</b> Prazo acima do máximo legal, alcance indevido, registro desatualizado.</span></li>
+          <li><span><b>Se vale a pena, e quanto custa o caminho.</b> Viabilidade, cronograma e proposta fechada para as etapas seguintes.</span></li>
+        </ol>
+        <dl class="ofr-termos">
+          <div><dt>Prazo</dt><dd>5 dias úteis após o envio dos documentos</dd></div>
+          <div><dt>Formato</dt><dd>Parecer assinado e reunião de apresentação</dd></div>
+          <div><dt>Valor</dt><dd>Fixo, informado na proposta, antes de qualquer compromisso</dd></div>
+          <div><dt>Se seguir adiante</dt><dd>O valor é abatido do projeto</dd></div>
+        </dl>
+        <p class="ofr-nota">Você sai com a data em que a empresa pode voltar a licitar e o passo a passo para chegar lá.
+          E, se o seu caso não tiver chance, fica sabendo antes de gastar com o processo.</p>
+      </div>
+
+      <div class="ofr-form-area">
+        <h3 class="ofr-sub">Peça a análise do seu caso</h3>
+        <p class="ofr-form-lead">Retorno em até 24 horas úteis. Sem compromisso e sem custo até a proposta.</p>
+        <form id="ofr-form" novalidate>
+          <input type="hidden" name="access_key" value="0ea5e920-c227-4deb-bfc7-b73f85ac9990">
+          <input type="hidden" name="subject" value="Novo pedido de análise — Parecer de Elegibilidade">
+          <input type="hidden" name="from_name" value="Página Consulta CEIS/CNEP">
+          <input type="hidden" name="origem" id="ofr-origem" value="pagina-consulta">
+          <input type="hidden" name="resultado_consulta" id="ofr-resultado" value="">
+          <input type="checkbox" name="botcheck" class="ofr-oculto" tabindex="-1" autocomplete="off">
+
+          <label class="ofr-campo"><span>Nome</span>
+            <input type="text" name="nome" id="ofr-nome" autocomplete="name" required></label>
+          <label class="ofr-campo"><span>Empresa</span>
+            <input type="text" name="empresa" id="ofr-empresa" autocomplete="organization" required></label>
+          <label class="ofr-campo"><span>CNPJ <i>opcional, agiliza a análise</i></span>
+            <input type="text" name="cnpj" id="ofr-cnpj" inputmode="numeric" maxlength="18" autocomplete="off"></label>
+          <div class="ofr-dois">
+            <label class="ofr-campo"><span>E-mail</span>
+              <input type="email" name="email" id="ofr-email" autocomplete="email" required></label>
+            <label class="ofr-campo"><span>WhatsApp</span>
+              <input type="tel" name="whatsapp" id="ofr-whats" autocomplete="tel" required></label>
+          </div>
+          <label class="ofr-campo"><span>Situação atual</span>
+            <select name="situacao" id="ofr-situacao" required>
+              <option value="" disabled selected>Selecione…</option>
+              <option value="impedida">Empresa impedida de licitar</option>
+              <option value="suspensa">Empresa com suspensão ativa</option>
+              <option value="inidoneidade">Declaração de inidoneidade</option>
+              <option value="processo">Processo sancionador em andamento</option>
+              <option value="preventivo">Quero prevenir uma sanção</option>
+              <option value="outro">Outra situação</option>
+            </select></label>
+
+          <button type="submit" class="ofr-btn" id="ofr-enviar">Pedir análise do caso</button>
+          <p class="ofr-erro" id="ofr-erro" hidden>O envio não foi concluído. Tente de novo ou fale pelo WhatsApp.</p>
+        </form>
+
+        <div class="ofr-ou"><span>ou</span></div>
+        <a class="ofr-btn ofr-btn-sec" id="ofr-whatsapp" target="_blank" rel="noopener noreferrer"
+           href="https://api.whatsapp.com/send?phone=5561998780564&amp;text=Ol%C3%A1%2C+vim+pela+consulta+CEIS%2FCNEP+e+gostaria+de+pedir+a+an%C3%A1lise+do+meu+caso.">Falar pelo WhatsApp</a>
+        <p class="ofr-leg">Seus dados são usados apenas para responder a este pedido e não são compartilhados com terceiros.</p>
+      </div>
+    </div>
+
+    <p class="ofr-rodape">Dr. Daniel de Souza · OAB/DF 71.124 · D'Souza Advocacia Empresarial · Brasília/DF<br>
+      A decisão sobre a reabilitação é da autoridade que aplicou a sanção. Este conteúdo é informativo e não
+      constitui promessa de resultado.</p>
+  </div>
+</section>
+
+<style>
+/* Tudo sob .ofr, com especificidade alta, para o tema do site não sobrescrever. */
+.ofr{--o-tinta:#000;--o-ouro:#C8A96E;--o-ouro-claro:#E8CC7A;--o-papel:#F7F4EE;--o-linha:rgba(200,169,110,.28);
+  --o-serif:'Playfair Display','Iowan Old Style',Georgia,serif;
+  display:block;box-sizing:border-box;max-width:980px;margin:36px auto;padding:0;
+  font-size:16px;line-height:1.6;color:#E9EEF6;background:var(--o-tinta);
+  border:1px solid var(--o-linha);border-top:3px solid var(--o-ouro);border-radius:6px;text-align:left}
+.ofr *,.ofr *::before,.ofr *::after{box-sizing:border-box}
+.ofr :where(p,h2,h3,ol,li,dl,dt,dd,label,form){margin:0;padding:0}
+.ofr .ofr-caixa{padding:38px 40px 30px}
+.ofr .ofr-olho{font-size:.8125em;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--o-ouro)}
+.ofr h2.ofr-tit{font-family:var(--o-serif);font-weight:600;font-size:1.75em;line-height:1.22;color:#fff;margin-top:14px}
+.ofr .ofr-lead{font-size:1.0625em;color:rgba(255,255,255,.74);margin-top:12px;max-width:62ch}
+.ofr .ofr-grade{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;margin-top:32px;align-items:start}
+.ofr h3.ofr-sub{font-family:var(--o-serif);font-weight:600;font-size:1.1875em;color:#fff}
+.ofr ol.ofr-itens{list-style:none;counter-reset:q;margin-top:16px;display:grid;gap:14px}
+.ofr ol.ofr-itens li{counter-increment:q;display:grid;grid-template-columns:30px 1fr;gap:12px;
+  font-size:.9375em;line-height:1.5;color:rgba(255,255,255,.74)}
+.ofr ol.ofr-itens li::before{content:counter(q);font-family:var(--o-serif);font-weight:600;font-size:1.25em;
+  color:var(--o-ouro);line-height:1.2;font-variant-numeric:lining-nums}
+.ofr ol.ofr-itens b{color:#fff;font-weight:600}
+.ofr dl.ofr-termos{margin-top:26px;border-top:1px solid var(--o-linha)}
+.ofr dl.ofr-termos div{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:11px 0;border-bottom:1px solid var(--o-linha)}
+.ofr dl.ofr-termos dt{font-size:.8125em;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.ofr dl.ofr-termos dd{font-size:.9375em;color:#fff}
+.ofr .ofr-nota{margin-top:20px;padding-left:16px;border-left:2px solid var(--o-ouro);
+  font-size:.9375em;line-height:1.55;color:rgba(255,255,255,.68)}
+
+.ofr .ofr-form-area{background:rgba(255,255,255,.04);border:1px solid var(--o-linha);border-radius:4px;padding:26px 24px}
+.ofr .ofr-form-lead{font-size:.9375em;color:rgba(255,255,255,.62);margin-top:6px}
+.ofr form{margin-top:18px}
+.ofr .ofr-campo{display:block;margin-bottom:13px}
+.ofr .ofr-campo > span{display:block;font-size:.75em;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--o-ouro);margin-bottom:6px}
+.ofr .ofr-campo > span i{font-style:normal;text-transform:none;letter-spacing:.02em;font-weight:400;color:rgba(255,255,255,.42)}
+.ofr .ofr-dois{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ofr input[type=text],.ofr input[type=email],.ofr input[type=tel],.ofr select{
+  width:100%;font-family:inherit;font-size:1em;line-height:1.3;color:#fff;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.2);border-radius:4px;padding:12px 13px;margin:0;height:auto;
+  box-shadow:none;appearance:none;-webkit-appearance:none;transition:border-color .16s}
+.ofr input:focus,.ofr select:focus{border-color:var(--o-ouro);outline:none}
+.ofr select{background-image:linear-gradient(45deg,transparent 50%,#C8A96E 50%),linear-gradient(135deg,#C8A96E 50%,transparent 50%);
+  background-position:calc(100% - 19px) 50%,calc(100% - 13px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat;padding-right:38px}
+.ofr select option{background:#111;color:#fff}
+.ofr .ofr-oculto{display:none}
+.ofr .ofr-btn{display:block;width:100%;margin-top:18px;padding:15px 20px;font-family:inherit;font-size:.9375em;
+  font-weight:600;line-height:1.2;letter-spacing:.02em;text-align:center;text-decoration:none;text-transform:none;
+  color:var(--o-tinta);background:var(--o-ouro);border:1px solid var(--o-ouro);border-radius:4px;
+  box-shadow:none;cursor:pointer;transition:background .16s,border-color .16s}
+.ofr .ofr-btn:hover{background:var(--o-ouro-claro);border-color:var(--o-ouro-claro);color:var(--o-tinta)}
+.ofr .ofr-btn:disabled{opacity:.6;cursor:not-allowed}
+.ofr .ofr-btn.ofr-btn-sec{background:transparent;color:var(--o-ouro);border-color:var(--o-linha);margin-top:0}
+.ofr .ofr-btn.ofr-btn-sec:hover{background:transparent;color:var(--o-ouro);border-color:var(--o-ouro)}
+.ofr .ofr-btn:focus-visible,.ofr input:focus-visible,.ofr select:focus-visible{outline:2px solid var(--o-ouro);outline-offset:2px}
+.ofr .ofr-erro{margin-top:11px;font-size:.9375em;color:#FFB4A8}
+.ofr .ofr-ou{display:flex;align-items:center;gap:14px;margin:18px 0;color:rgba(255,255,255,.35);font-size:.8125em}
+.ofr .ofr-ou::before,.ofr .ofr-ou::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.14)}
+.ofr .ofr-leg{margin-top:14px;font-size:.8125em;line-height:1.5;color:rgba(255,255,255,.45);text-align:center}
+.ofr .ofr-obrigado{text-align:center;padding:26px 0}
+.ofr .ofr-obrigado b{display:block;font-family:var(--o-serif);font-size:1.375em;color:var(--o-ouro);margin-bottom:10px}
+.ofr .ofr-obrigado span{display:block;font-size:.9375em;line-height:1.6;color:rgba(255,255,255,.76)}
+.ofr .ofr-rodape{margin-top:30px;padding-top:18px;border-top:1px solid var(--o-linha);
+  font-size:.8125em;line-height:1.6;color:rgba(255,255,255,.45)}
+
+/* Último recurso: alguns temas marcam botão e campo com !important. Só o essencial. */
+.ofr .ofr-btn{background:var(--o-ouro)!important;color:var(--o-tinta)!important;border-color:var(--o-ouro)!important;
+  border-radius:4px!important;text-transform:none!important;letter-spacing:.02em!important}
+.ofr .ofr-btn:hover{background:var(--o-ouro-claro)!important;border-color:var(--o-ouro-claro)!important}
+.ofr .ofr-btn.ofr-btn-sec{background:transparent!important;color:var(--o-ouro)!important;border-color:var(--o-linha)!important}
+.ofr input[type=text],.ofr input[type=email],.ofr input[type=tel],.ofr select{
+  background-color:rgba(255,255,255,.07)!important;color:#fff!important;border-radius:4px!important}
+
+@media (max-width:820px){
+  .ofr .ofr-grade{grid-template-columns:1fr;gap:28px}
+  .ofr .ofr-caixa{padding:28px 20px 24px}
+  .ofr h2.ofr-tit{font-size:1.5em}
+  .ofr dl.ofr-termos div{grid-template-columns:1fr;gap:2px}
+  .ofr .ofr-dois{grid-template-columns:1fr}
+  .ofr .ofr-form-area{padding:22px 18px}
+}
+@media (prefers-reduced-motion:reduce){.ofr *{transition:none!important}}
+</style>
+
+<script>
+(function () {
+  "use strict";
+  var form = document.getElementById("ofr-form");
+  if (!form || form.dataset.pronto) return;
+  form.dataset.pronto = "1";
+
+  function ev(nome, p) { try { if (typeof gtag === "function") gtag("event", nome, p || {}); } catch (e) {} }
+  function digitos(s) { return String(s || "").replace(/\D/g, ""); }
+  function mascara(c) {
+    c = digitos(c).slice(0, 14);
+    return c.replace(/^(\d{2})(\d)/, "$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+            .replace(/\.(\d{3})(\d)/, ".$1/$2").replace(/(\d{4})(\d)/, "$1-$2");
+  }
+  var cnpjEl = document.getElementById("ofr-cnpj");
+  cnpjEl.addEventListener("input", function () { cnpjEl.value = mascara(cnpjEl.value); });
+
+  /* Quem consultou na mesma página chega aqui com tudo preenchido. */
+  document.addEventListener("consulta-rise:resultado", function (e) {
+    var d = e.detail || {};
+    if (!d.registros) return;
+    if (digitos(d.cnpj).length === 14) cnpjEl.value = mascara(d.cnpj);
+    var emp = document.getElementById("ofr-empresa");
+    if (d.empresa && !emp.value) emp.value = d.empresa;
+    var t = d.tipos || [], sel = document.getElementById("ofr-situacao");
+    if (!sel.value) {
+      sel.value = t.indexOf("inidoneidade") >= 0 ? "inidoneidade"
+                : t.indexOf("impedimento") >= 0 ? "impedida"
+                : t.indexOf("suspensao") >= 0 ? "suspensa" : "outro";
+    }
+    document.getElementById("ofr-origem").value = "consulta-na-pagina";
+    document.getElementById("ofr-resultado").value = d.registros + " registro(s): " + t.join(", ");
+    var w = document.getElementById("ofr-whatsapp");
+    w.href = "https://api.whatsapp.com/send?phone=5561998780564&text=" +
+      encodeURIComponent("Olá, consultei o CNPJ " + mascara(d.cnpj) + " e gostaria de pedir a análise do caso.");
+  });
+
+  /* Quem chega da consulta publicada em outra página, com ?cnpj= na URL. */
+  try {
+    var q = new URLSearchParams(location.search);
+    if (digitos(q.get("cnpj")).length === 14) {
+      cnpjEl.value = mascara(q.get("cnpj"));
+      document.getElementById("ofr-origem").value = "consulta-externa";
+    }
+  } catch (e) {}
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    var bt = document.getElementById("ofr-enviar"), erro = document.getElementById("ofr-erro"), antes = bt.textContent;
+    bt.disabled = true; bt.textContent = "Enviando…"; erro.hidden = true;
+    function falhou() { bt.disabled = false; bt.textContent = antes; erro.hidden = false; }
+    fetch("https://api.web3forms.com/submit", { method: "POST", body: new FormData(form) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.success) return falhou();
+        try { if (typeof fbq === "function") fbq("track", "Lead"); } catch (x) {}
+        ev("generate_lead", { form: "parecer-elegibilidade", origem: document.getElementById("ofr-origem").value });
+        form.innerHTML = '<div class="ofr-obrigado"><b>Pedido recebido.</b>' +
+          '<span>Você recebe o retorno em até 24 horas úteis. Se tiver o ato punitivo em mãos, ' +
+          'deixe-o separado: é o primeiro documento que vamos pedir.</span></div>';
+      })
+      .catch(falhou);
+  });
+})();
+</script>
