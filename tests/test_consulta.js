@@ -145,6 +145,28 @@ test("próxima janela: nada a avisar quando o prazo já se cumpriu ou não há g
   assert.strictEqual(c.proximaJanela([], HOJE), null);
 });
 
+test("marco de aviso: a janela quando existe", () => {
+  const m = c.marcoDeAviso([{ c: "Impedimento", i: "2026-03-31", f: "2029-03-31", l: "Lei 14133" }], HOJE);
+  assert.strictEqual(m.motivo, "janela");
+  assert.strictEqual(m.quando.getFullYear(), 2027);
+});
+
+test("marco de aviso: sem janela, avisa o fim da última restrição", () => {
+  const m = c.marcoDeAviso([
+    { c: "Impedimento", i: "2026-03-30", f: "2027-03-30", l: "Lei 14133" },   // sem ganho
+    { c: "Suspensão", i: "2026-01-10", f: "2027-09-10", l: "Lei 8.666" },     // termina depois
+  ], HOJE);
+  assert.strictEqual(m.motivo, "fim");
+  assert.strictEqual(m.quando.getFullYear(), 2027);
+  assert.strictEqual(m.quando.getMonth(), 8);
+});
+
+test("marco de aviso: nada a prometer quando falta data ou só há multa", () => {
+  assert.strictEqual(c.marcoDeAviso([{ c: "Suspensão", i: "2026-01-10", f: null, l: "Lei 8.666" }], HOJE), null);
+  assert.strictEqual(c.marcoDeAviso([{ c: "Multa", i: "2025-12-02", f: null, l: "Lei 12846" }], HOJE), null);
+  assert.strictEqual(c.marcoDeAviso([], HOJE), null);
+});
+
 test("CNPJ: validação e máscara", () => {
   assert.ok(c.cnpjValido("31797544000150"));
   assert.ok(!c.cnpjValido("31797544000151"));

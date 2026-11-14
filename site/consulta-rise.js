@@ -226,7 +226,27 @@
     return menor;
   }
 
-  var API = { baseDeScript: baseDeScript, proximaJanela: proximaJanela, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
+  var RESTRITIVAS = ["impedimento", "inidoneidade", "suspensao", "judicial"];
+
+  /**
+   * O que vale avisar: a primeira janela de reabilitação que ainda abre ou, quando não há nenhuma,
+   * o dia em que a última restrição se encerra. Devolve {quando, motivo} ou null.
+   */
+  function marcoDeAviso(lista, hoje) {
+    var j = proximaJanela(lista, hoje);
+    if (j) return { quando: j, motivo: "janela" };
+    var fim = null, incompleto = false;
+    (lista || []).forEach(function (s) {
+      if (RESTRITIVAS.indexOf(tipo(s.c)) < 0) return;
+      var f = data(s.f);
+      if (!f) { incompleto = true; return; }
+      if (!fim || f > fim) fim = f;
+    });
+    if (incompleto || !fim || fim <= hoje) return null;
+    return { quando: fim, motivo: "fim" };
+  }
+
+  var API = { baseDeScript: baseDeScript, proximaJanela: proximaJanela, marcoDeAviso: marcoDeAviso, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
               leiLicitacao: leiLicitacao, nome: nome, alcance: alcance, excesso: excesso, reabilitacao: reabilitacao,
               linhaDoTempo: linhaDoTempo, prazo: prazo, linkContato: linkContato, veredito: veredito, resumo: resumo, data: data };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
@@ -256,7 +276,7 @@
     ".rc{--rc-ink:#000;--rc-ink2:#1a1a1a;--rc-gold:#c8a96e;--rc-goldtx:#7a5c1e;--rc-paper:#fff;--rc-wash:#f7f4ee;--rc-line:#e2dccd;",
     "--rc-tx:#1a2b3c;--rc-mut:#5b6b78;--rc-red:#8f2a2a;--rc-redbg:#fbf1f0;--rc-yel:#7a5200;--rc-yelbg:#fff8e8;--rc-grn:#1d6341;--rc-grnbg:#eef7f1;",
     "--rc-serif:'Playfair Display','Iowan Old Style','Palatino Linotype',Georgia,serif;",
-    "all:revert;display:block;box-sizing:border-box;max-width:780px;margin:32px auto;font-family:var(--rc-font,inherit);font-size:var(--rc-size,16px);line-height:1.55;color:var(--rc-tx);",
+    "all:revert;display:block;box-sizing:border-box;max-width:var(--rc-max,780px);margin:32px auto;font-family:var(--rc-font,inherit);font-size:var(--rc-size,16px);line-height:1.55;color:var(--rc-tx);",
     /* Muitos sites usam serifada de título no corpo, com algarismos antigos: CNPJ e datas ficam
        difíceis de ler. Dentro da consulta, número é sempre de altura uniforme. */
     "font-variant-numeric:lining-nums tabular-nums;font-feature-settings:'lnum' 1,'tnum' 1;",
@@ -286,7 +306,7 @@
     ".rc-ver.r{background:var(--rc-redbg);border-color:var(--rc-red)}.rc-ver.y{background:var(--rc-yelbg);border-color:#c08a12}.rc-ver.g{background:var(--rc-grnbg);border-color:var(--rc-grn)}",
     ".rc-ver strong{display:block;font-family:var(--rc-serif);font-weight:600;font-size:1.25em;line-height:1.3}",
     ".rc-ver.r strong{color:var(--rc-red)}.rc-ver.y strong{color:var(--rc-yel)}.rc-ver.g strong{color:var(--rc-grn)}",
-    ".rc-ver span{display:block;margin-top:4px;font-size:0.938em}",
+    ".rc-ver span{display:block;margin-top:4px;font-size:0.938em;max-width:82ch}",
     ".rc-emp{margin-top:24px;padding-bottom:16px;border-bottom:1px solid var(--rc-ink)}",
     ".rc-emp b{display:block;font-family:var(--rc-serif);font-weight:600;font-size:1.375em;line-height:1.25;color:var(--rc-ink)}",
     ".rc-emp span{display:block;color:var(--rc-mut);font-size:0.938em;font-variant-numeric:tabular-nums;margin-top:2px}",
@@ -299,6 +319,7 @@
     ".rc-base{flex:none;font-size:0.812em;color:var(--rc-mut);border:1px solid var(--rc-line);border-radius:3px;padding:1px 7px}",
     ".rc-dl{display:grid;grid-template-columns:150px 1fr;gap:6px 16px;margin-top:12px;font-size:0.938em}",
     ".rc-dl dt{color:var(--rc-mut)}",
+    ".rc-dl dd{max-width:74ch}",
 
     /* linha do tempo: decorrido em tinta, janela de reabilitação em ouro */
     ".rc-lt{margin-top:18px}",
@@ -311,7 +332,7 @@
     ".rc-lt-t b{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;background:var(--rc-gold);border:2px solid #fff;transform:rotate(45deg)}",
     ".rc-lt-d{display:flex;justify-content:space-between;font-size:0.812em;color:var(--rc-mut);margin-top:6px;font-variant-numeric:tabular-nums}",
 
-    ".rc-nota{margin-top:14px;padding:12px 14px;background:var(--rc-wash);border-left:3px solid var(--rc-gold);font-size:0.938em}",
+    ".rc-nota{margin-top:14px;padding:12px 14px;background:var(--rc-wash);border-left:3px solid var(--rc-gold);font-size:0.938em;max-width:88ch}",
     ".rc-nota.s{border-left-color:#bdb49f}",
     ".rc-alerta{margin-top:10px;padding:12px 14px;background:var(--rc-yelbg);border-left:3px solid #c08a12;font-size:0.938em}",
     ".rc-alerta b{color:var(--rc-yel)}",
@@ -464,7 +485,7 @@
             '?text=' + encodeURIComponent("Olá! Fiz a consulta de elegibilidade do CNPJ " + mascara(c) + " e gostaria de entender minhas opções.") + '">WhatsApp</a>' : "") +
           '</div></div>';
       }
-      var janela = proximaJanela(lista, hoje);
+      var marco = marcoDeAviso(lista, hoje);
       if (captura && lista.length) {
         h += '<form class="rc-cap"><strong>Receba este resultado por e-mail</strong>' +
           '<p>Enviamos o resumo das sanções e as datas em até 24 horas úteis, para você guardar ou mostrar ao seu contador.</p>' +
@@ -472,8 +493,9 @@
           '<input type="text" name="nome" placeholder="Seu nome" autocomplete="name" required>' +
           '<input type="email" name="email" placeholder="E-mail" autocomplete="email" required>' +
           '<input type="text" name="whatsapp" placeholder="WhatsApp (opcional)" autocomplete="tel"></div>' +
-          (janela ? '<label class="rc-check"><input type="checkbox" name="avisar" checked>' +
-            '<span>Quero ser avisado quando a janela de reabilitação abrir, em ' + esc(br(janela)) + '.</span></label>' : "") +
+          (marco ? '<label class="rc-check"><input type="checkbox" name="avisar" checked><span>Quero ser avisado quando ' +
+            (marco.motivo === "janela" ? "a janela de reabilitação abrir" : "a última sanção terminar") +
+            ', em ' + esc(br(marco.quando)) + '.</span></label>' : "") +
           '<label class="rc-check"><input type="checkbox" name="conteudo">' +
           '<span>Quero receber conteúdos sobre licitações e reabilitação.</span></label>' +
           '<button class="rc-btn" type="submit">Enviar para o meu e-mail</button>' +
@@ -497,7 +519,9 @@
         d.append("cnpj", mascara(c));
         d.append("empresa", emp ? emp.n : "");
         d.append("resultado", (rs || v.t) + " (" + lista.length + " registro(s))");
-        d.append("avisar_em", janela && form.avisar && form.avisar.checked ? br(janela) : "não");
+        var avisar = marco && form.avisar && form.avisar.checked;
+        d.append("avisar_em", avisar ? br(marco.quando) : "não");
+        d.append("motivo_aviso", avisar ? (marco.motivo === "janela" ? "janela de reabilitação" : "fim da sanção") : "—");
         d.append("aceita_conteudo", form.conteudo.checked ? "sim" : "não");
         fetch("https://api.web3forms.com/submit", { method: "POST", body: d })
           .then(function (r) { return r.json(); })
@@ -505,7 +529,7 @@
             if (!j.success) throw new Error("recusado");
             evento("captura_consulta", { avisar: d.get("avisar_em") !== "não" ? 1 : 0 });
             form.innerHTML = '<p class="rc-cap-ok"><b>Pedido recebido.</b>O resumo chega ao seu e-mail em até 24 horas úteis' +
-              (janela && d.get("avisar_em") !== "não" ? ', e guardamos a data de ' + esc(br(janela)) + ' para avisar você.' : '.') + '</p>';
+              (avisar ? ', e guardamos a data de ' + esc(br(marco.quando)) + ' para avisar você.' : '.') + '</p>';
           })
           .catch(function () {
             bt.disabled = false; bt.textContent = antes;
