@@ -24,10 +24,17 @@ Opções no `<div>`:
 | `data-contato` | Destino do botão "Pedir análise do caso". URL recebe `?cnpj=...&origem=consulta`; uma âncora (`#contato`) rola a própria página |
 | `data-whatsapp` | Número com DDI e DDD, só dígitos (ex.: `5561999999999`), para mostrar o botão de WhatsApp |
 | `data-titulo` | Título do bloco |
+| `data-captura` | Chave do Web3Forms. Com ela, aparece abaixo do resultado o formulário "Receba este resultado por e-mail", com as opções de aviso da janela e de conteúdo. Sem ela, não há formulário. |
 | `data-dados` | Pasta dos arquivos de dados, com barra no fim. Sem isso, sai do endereço do script; informe quando um construtor de página reinjetar o script |
 | `data-fontes="nao"` | Não carrega a fonte Playfair Display do Google Fonts (os títulos usam a serifada do sistema) |
 
 Se o Google Analytics 4 estiver no site, a consulta registra os eventos `consulta_elegibilidade` (com ou sem sanção, sem o CNPJ) e `clique_contato_consulta`.
+
+## Captura de contato (opcional)
+
+Com `data-captura`, quem consulta um CNPJ **com sanção** vê, abaixo do resultado, um formulário curto: nome, e-mail e WhatsApp opcional, mais duas caixas — ser avisado quando a janela de reabilitação abrir (com a data calculada para aquele CNPJ) e receber conteúdos. Nada é enviado sem o envio do formulário pela própria pessoa, e o rodapé muda para dizer isso.
+
+O e-mail que chega traz o CNPJ, a empresa, o resumo dos registros e o campo `avisar_em` com a data da janela — é esse campo que permite montar a rotina de aviso depois.
 
 ## O que a página informa em cada registro
 
