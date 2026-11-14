@@ -467,7 +467,7 @@
       var janela = proximaJanela(lista, hoje);
       if (captura && lista.length) {
         h += '<form class="rc-cap"><strong>Receba este resultado por e-mail</strong>' +
-          '<p>Mandamos o resumo das sanções e as datas, para você guardar ou mostrar ao seu contador.</p>' +
+          '<p>Enviamos o resumo das sanções e as datas em até 24 horas úteis, para você guardar ou mostrar ao seu contador.</p>' +
           '<div class="rc-cap-campos">' +
           '<input type="text" name="nome" placeholder="Seu nome" autocomplete="name" required>' +
           '<input type="email" name="email" placeholder="E-mail" autocomplete="email" required>' +
@@ -504,8 +504,8 @@
           .then(function (j) {
             if (!j.success) throw new Error("recusado");
             evento("captura_consulta", { avisar: d.get("avisar_em") !== "não" ? 1 : 0 });
-            form.innerHTML = '<p class="rc-cap-ok"><b>Enviado.</b>Confira a sua caixa de entrada' +
-              (janela && d.get("avisar_em") !== "não" ? '. Guardamos a data de ' + esc(br(janela)) + ' para avisar você.' : '.') + '</p>';
+            form.innerHTML = '<p class="rc-cap-ok"><b>Pedido recebido.</b>O resumo chega ao seu e-mail em até 24 horas úteis' +
+              (janela && d.get("avisar_em") !== "não" ? ', e guardamos a data de ' + esc(br(janela)) + ' para avisar você.' : '.') + '</p>';
           })
           .catch(function () {
             bt.disabled = false; bt.textContent = antes;
