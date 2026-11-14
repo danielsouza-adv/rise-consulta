@@ -257,6 +257,9 @@
     "--rc-tx:#1a2b3c;--rc-mut:#5b6b78;--rc-red:#8f2a2a;--rc-redbg:#fbf1f0;--rc-yel:#7a5200;--rc-yelbg:#fff8e8;--rc-grn:#1d6341;--rc-grnbg:#eef7f1;",
     "--rc-serif:'Playfair Display','Iowan Old Style','Palatino Linotype',Georgia,serif;",
     "all:revert;display:block;box-sizing:border-box;max-width:780px;margin:32px auto;font-family:var(--rc-font,inherit);font-size:var(--rc-size,16px);line-height:1.55;color:var(--rc-tx);",
+    /* Muitos sites usam serifada de título no corpo, com algarismos antigos: CNPJ e datas ficam
+       difíceis de ler. Dentro da consulta, número é sempre de altura uniforme. */
+    "font-variant-numeric:lining-nums tabular-nums;font-feature-settings:'lnum' 1,'tnum' 1;",
     "background:var(--rc-paper);border:1px solid var(--rc-line);border-radius:6px;overflow:hidden;box-shadow:0 30px 60px -38px rgba(0,0,0,.55);text-align:left}",
     ".rc *,.rc *::before,.rc *::after{box-sizing:border-box}",
     ".rc :where(p,h3,h4,dl,dd,dt){margin:0;padding:0}",
