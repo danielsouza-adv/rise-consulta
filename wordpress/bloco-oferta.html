@@ -88,34 +88,34 @@
 /* Tudo sob .ofr, com especificidade alta, para o tema do site não sobrescrever. */
 .ofr{--o-tinta:#000;--o-ouro:#C8A96E;--o-ouro-claro:#E8CC7A;--o-papel:#F7F4EE;--o-linha:rgba(200,169,110,.28);
   --o-serif:'Playfair Display','Iowan Old Style',Georgia,serif;
-  display:block;box-sizing:border-box;max-width:980px;margin:36px auto;padding:0;
+  display:block;box-sizing:border-box;width:100%;margin:36px 0;padding:0;
   font-size:16px;line-height:1.6;color:#E9EEF6;background:var(--o-tinta);
   border:1px solid var(--o-linha);border-top:3px solid var(--o-ouro);border-radius:6px;text-align:left}
 .ofr *,.ofr *::before,.ofr *::after{box-sizing:border-box}
 .ofr :where(p,h2,h3,ol,li,dl,dt,dd,label,form){margin:0;padding:0}
-.ofr .ofr-caixa{padding:38px 40px 30px}
+.ofr .ofr-caixa{padding:46px 48px 34px}
 .ofr .ofr-olho{font-size:.8125em;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--o-ouro)}
 .ofr h2.ofr-tit{font-family:var(--o-serif);font-weight:600;font-size:1.75em;line-height:1.22;color:#fff;margin-top:14px}
-.ofr .ofr-lead{font-size:1.0625em;color:rgba(255,255,255,.74);margin-top:12px;max-width:62ch}
-.ofr .ofr-grade{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;margin-top:32px;align-items:start}
+.ofr .ofr-lead{font-size:1.0625em;color:rgba(255,255,255,.78);margin-top:14px;max-width:62ch}
+.ofr .ofr-grade{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;margin-top:38px;align-items:start}
 .ofr h3.ofr-sub{font-family:var(--o-serif);font-weight:600;font-size:1.1875em;color:#fff}
-.ofr ol.ofr-itens{list-style:none;counter-reset:q;margin-top:16px;display:grid;gap:14px}
+.ofr ol.ofr-itens{list-style:none;counter-reset:q;margin-top:20px;display:grid;gap:18px}
 .ofr ol.ofr-itens li{counter-increment:q;display:grid;grid-template-columns:30px 1fr;gap:12px;
   font-size:.9375em;line-height:1.5;color:rgba(255,255,255,.74)}
 .ofr ol.ofr-itens li::before{content:counter(q);font-family:var(--o-serif);font-weight:600;font-size:1.25em;
   color:var(--o-ouro);line-height:1.2;font-variant-numeric:lining-nums}
 .ofr ol.ofr-itens b{color:#fff;font-weight:600}
-.ofr dl.ofr-termos{margin-top:26px;border-top:1px solid var(--o-linha)}
-.ofr dl.ofr-termos div{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:11px 0;border-bottom:1px solid var(--o-linha)}
+.ofr dl.ofr-termos{margin-top:30px;border-top:1px solid var(--o-linha)}
+.ofr dl.ofr-termos div{display:grid;grid-template-columns:168px 1fr;gap:16px;padding:13px 0;border-bottom:1px solid var(--o-linha)}
 .ofr dl.ofr-termos dt{font-size:.8125em;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .ofr dl.ofr-termos dd{font-size:.9375em;color:#fff}
 .ofr .ofr-nota{margin-top:20px;padding-left:16px;border-left:2px solid var(--o-ouro);
   font-size:.9375em;line-height:1.55;color:rgba(255,255,255,.68)}
 
-.ofr .ofr-form-area{background:rgba(255,255,255,.04);border:1px solid var(--o-linha);border-radius:4px;padding:26px 24px}
+.ofr .ofr-form-area{background:rgba(255,255,255,.04);border:1px solid var(--o-linha);border-radius:4px;padding:30px 28px}
 .ofr .ofr-form-lead{font-size:.9375em;color:rgba(255,255,255,.62);margin-top:6px}
 .ofr form{margin-top:18px}
-.ofr .ofr-campo{display:block;margin-bottom:13px}
+.ofr .ofr-campo{display:block;margin-bottom:15px}
 .ofr .ofr-campo > span{display:block;font-size:.75em;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
   color:var(--o-ouro);margin-bottom:6px}
 .ofr .ofr-campo > span i{font-style:normal;text-transform:none;letter-spacing:.02em;font-weight:400;color:rgba(255,255,255,.42)}
@@ -156,9 +156,10 @@
 .ofr input[type=text],.ofr input[type=email],.ofr input[type=tel],.ofr select{
   background-color:rgba(255,255,255,.07)!important;color:#fff!important;border-radius:4px!important}
 
+@media (max-width:1000px){.ofr .ofr-grade{gap:36px}.ofr .ofr-caixa{padding:38px 32px 30px}}
 @media (max-width:820px){
-  .ofr .ofr-grade{grid-template-columns:1fr;gap:28px}
-  .ofr .ofr-caixa{padding:28px 20px 24px}
+  .ofr .ofr-grade{grid-template-columns:1fr;gap:30px}
+  .ofr .ofr-caixa{padding:30px 20px 26px}
   .ofr h2.ofr-tit{font-size:1.5em}
   .ofr dl.ofr-termos div{grid-template-columns:1fr;gap:2px}
   .ofr .ofr-dois{grid-template-columns:1fr}
