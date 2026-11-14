@@ -127,6 +127,24 @@ test("pasta dos dados sai do endereço do script, com ou sem ?ver=", () => {
   assert.strictEqual(c.baseDeScript("/js/consulta-rise.js"), "/js/dados/");
 });
 
+test("próxima janela: a data mais próxima que ainda vai abrir", () => {
+  const lista = [
+    { c: "Impedimento", i: "2026-03-31", f: "2029-03-31", l: "Lei 14133" },          // abre em 31/03/2027
+    { c: "Declaração de Inidoneidade", i: "2026-05-13", f: null, l: "Lei 8666" },     // abre em 13/05/2028
+  ];
+  const j = c.proximaJanela(lista, HOJE);
+  assert.strictEqual(j.getFullYear(), 2027);
+  assert.strictEqual(j.getMonth(), 2);
+  assert.strictEqual(j.getDate(), 31);
+});
+
+test("próxima janela: nada a avisar quando o prazo já se cumpriu ou não há ganho", () => {
+  assert.strictEqual(c.proximaJanela([{ c: "Impedimento", i: "2025-06-01", f: "2028-06-01", l: "Lei 14133" }], HOJE), null);
+  assert.strictEqual(c.proximaJanela([{ c: "Impedimento", i: "2026-03-30", f: "2027-03-30", l: "Lei 14133" }], HOJE), null);
+  assert.strictEqual(c.proximaJanela([{ c: "Suspensão", i: "2026-01-01", f: "2027-01-01", l: "Lei 8.666" }], HOJE), null);
+  assert.strictEqual(c.proximaJanela([], HOJE), null);
+});
+
 test("CNPJ: validação e máscara", () => {
   assert.ok(c.cnpjValido("31797544000150"));
   assert.ok(!c.cnpjValido("31797544000151"));

@@ -216,7 +216,17 @@
     return String(src || "").split("?")[0].split("#")[0].replace(/[^/]*$/, "") + "dados/";
   }
 
-  var API = { baseDeScript: baseDeScript, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
+  /** Data da primeira janela de reabilitação que ainda vai abrir, entre as sanções; null se não houver. */
+  function proximaJanela(lista, hoje) {
+    var menor = null;
+    (lista || []).forEach(function (s) {
+      var r = reabilitacao(s, tipo(s.c), hoje);
+      if (r && r.caso === "futura" && r.quando && (!menor || r.quando < menor)) menor = r.quando;
+    });
+    return menor;
+  }
+
+  var API = { baseDeScript: baseDeScript, proximaJanela: proximaJanela, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
               leiLicitacao: leiLicitacao, nome: nome, alcance: alcance, excesso: excesso, reabilitacao: reabilitacao,
               linhaDoTempo: linhaDoTempo, prazo: prazo, linkContato: linkContato, veredito: veredito, resumo: resumo, data: data };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
@@ -310,9 +320,26 @@
     ".rc-cta{margin:26px -32px 0;padding:26px 32px;background:var(--rc-ink);color:#fff;display:flex;gap:14px 20px;flex-wrap:wrap;align-items:center}",
     ".rc-cta p{flex:1 1 280px;font-family:var(--rc-serif);font-weight:600;font-size:1.188em;line-height:1.35;color:#fff}",
     ".rc-cta .rc-acoes{display:flex;gap:10px;flex-wrap:wrap}",
+    /* captura: aparece depois do resultado, em tom de papel, para não competir com a chamada */
+    ".rc-cap{margin-top:22px;padding:22px 24px;background:var(--rc-wash);border-top:3px solid var(--rc-gold)}",
+    ".rc-cap strong{display:block;font-family:var(--rc-serif);font-weight:600;font-size:1.188em;color:var(--rc-ink);line-height:1.3}",
+    ".rc-cap > p{margin-top:5px;font-size:0.938em;color:var(--rc-mut)}",
+    ".rc-cap-campos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}",
+    ".rc-cap-campos input{grid-column:span 1}.rc-cap-campos input:first-child{grid-column:1/-1}",
+    ".rc-cap input[type=text],.rc-cap input[type=email]{width:100%;font:inherit;font-size:1em;color:var(--rc-tx);",
+    "background:#fff;border:1px solid var(--rc-line);border-radius:4px;padding:11px 13px;margin:0}",
+    ".rc-cap input::placeholder{color:#9aa5b5}",
+    ".rc-check{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:0.938em;line-height:1.45;cursor:pointer}",
+    ".rc-check input{margin:3px 0 0;flex:none;width:16px;height:16px;accent-color:var(--rc-goldtx)}",
+    ".rc-cap button{margin-top:16px}",
+    ".rc-cap-leg{margin-top:12px;font-size:0.812em;line-height:1.5;color:var(--rc-mut)}",
+    ".rc-cap .rc-msg{color:var(--rc-red);margin-top:10px;font-size:0.938em}",
+    ".rc-cap-ok{font-size:1em;color:var(--rc-grn)}",
+    ".rc-cap-ok b{display:block;font-family:var(--rc-serif);font-size:1.188em;margin-bottom:4px}",
     ".rc-aviso{padding:18px 32px 22px;font-size:0.812em;line-height:1.55;color:var(--rc-mut)}",
 
     "@media (max-width:560px){.rc{margin:20px auto}.rc-topo{padding:24px 20px 22px}.rc h3.rc-tit{font-size:1.438em}.rc-res{padding:22px 20px 4px}",
+    ".rc-cap{padding:20px}.rc-cap-campos{grid-template-columns:1fr}",
     ".rc-dl{grid-template-columns:1fr;gap:2px}.rc-dl dt{margin-top:8px;font-size:0.812em}.rc-cta{margin:22px -20px 0;padding:22px 20px}.rc-aviso{padding:16px 20px 20px}",
     ".rc-btn{flex:1 1 auto}.rc-cta .rc-acoes{width:100%}}",
     "@media (prefers-reduced-motion:reduce){.rc-btn{transition:none}}",
@@ -327,7 +354,10 @@
     ".rc .rc-btn.rc-sec:hover{background:transparent;color:#fff;border-color:#fff}",
     ".rc .rc-form input{font-family:inherit;font-size:1.125em;background:#fff;color:var(--rc-ink);",
     "border:1px solid transparent;border-radius:4px;box-shadow:none;height:auto;line-height:normal;margin:0}",
-    ".rc .rc-aviso a,.rc .rc-nota a,.rc .rc-alerta a{color:var(--rc-goldtx)}"
+    ".rc .rc-aviso a,.rc .rc-nota a,.rc .rc-alerta a{color:var(--rc-goldtx)}",
+    ".rc .rc-cap input[type=text],.rc .rc-cap input[type=email]{font-family:inherit;font-size:1em;background:#fff;",
+    "color:var(--rc-tx);border:1px solid var(--rc-line);border-radius:4px;box-shadow:none;height:auto;line-height:normal;margin:0;width:100%}",
+    ".rc .rc-check input[type=checkbox]{width:16px;height:16px;margin:3px 0 0;opacity:1;position:static;appearance:auto;-webkit-appearance:checkbox}"
   ].join("");
 
   function evento(nomeEv, params) { try { if (window.gtag) window.gtag("event", nomeEv, params || {}); } catch (e) {} }
@@ -367,6 +397,7 @@
     var contato = raiz.getAttribute("data-contato") || "https://rise.dssouza.com/";
     var whats = digitos(raiz.getAttribute("data-whatsapp"));
     var titulo = raiz.getAttribute("data-titulo") || "Consulta de elegibilidade para licitações";
+    var captura = (raiz.getAttribute("data-captura") || "").trim();   /* chave do Web3Forms; vazio = sem formulário */
     if (!document.getElementById("rc-css")) {
       var st = document.createElement("style"); st.id = "rc-css"; st.textContent = CSS; document.head.appendChild(st);
       if (raiz.getAttribute("data-fontes") !== "nao") {
@@ -383,8 +414,10 @@
       '<div class="rc-msg" role="alert" aria-live="polite"></div></div>' +
       '<div class="rc-res" aria-live="polite"></div>' +
       '<p class="rc-aviso">Dados públicos do Portal da Transparência (CEIS e CNEP)<span class="rc-atual"></span>. ' +
-      'A consulta é feita no seu navegador: o CNPJ digitado não é enviado nem armazenado. As informações têm caráter ' +
-      'informativo e não substituem a leitura do ato punitivo nem a análise jurídica do caso.</p>';
+      'A consulta é feita no seu navegador: ' + (captura
+        ? 'o CNPJ só sai daqui se você pedir o resultado por e-mail no formulário acima.'
+        : 'o CNPJ digitado não é enviado nem armazenado.') +
+      ' As informações têm caráter informativo e não substituem a leitura do ato punitivo nem a análise jurídica do caso.</p>';
     var input = raiz.querySelector("input"), msg = raiz.querySelector(".rc-msg"), res = raiz.querySelector(".rc-res");
     var base = baseDados(raiz), cache = {};
 
@@ -428,7 +461,54 @@
             '?text=' + encodeURIComponent("Olá! Fiz a consulta de elegibilidade do CNPJ " + mascara(c) + " e gostaria de entender minhas opções.") + '">WhatsApp</a>' : "") +
           '</div></div>';
       }
+      var janela = proximaJanela(lista, hoje);
+      if (captura && lista.length) {
+        h += '<form class="rc-cap"><strong>Receba este resultado por e-mail</strong>' +
+          '<p>Mandamos o resumo das sanções e as datas, para você guardar ou mostrar ao seu contador.</p>' +
+          '<div class="rc-cap-campos">' +
+          '<input type="text" name="nome" placeholder="Seu nome" autocomplete="name" required>' +
+          '<input type="email" name="email" placeholder="E-mail" autocomplete="email" required>' +
+          '<input type="text" name="whatsapp" placeholder="WhatsApp (opcional)" autocomplete="tel"></div>' +
+          (janela ? '<label class="rc-check"><input type="checkbox" name="avisar" checked>' +
+            '<span>Quero ser avisado quando a janela de reabilitação abrir, em ' + esc(br(janela)) + '.</span></label>' : "") +
+          '<label class="rc-check"><input type="checkbox" name="conteudo">' +
+          '<span>Quero receber conteúdos sobre licitações e reabilitação.</span></label>' +
+          '<button class="rc-btn" type="submit">Enviar para o meu e-mail</button>' +
+          '<p class="rc-cap-leg">Usamos seus dados para este envio e para o que você marcar acima. ' +
+          'Nada é compartilhado com terceiros, e você pode pedir a exclusão quando quiser.</p>' +
+          '<p class="rc-msg" role="alert"></p></form>';
+      }
       res.innerHTML = h;
+      var form = res.querySelector(".rc-cap");
+      if (form) form.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var bt = form.querySelector("button"), erro = form.querySelector(".rc-msg"), antes = bt.textContent;
+        bt.disabled = true; bt.textContent = "Enviando…"; erro.textContent = "";
+        var d = new FormData();
+        d.append("access_key", captura);
+        d.append("subject", "Consulta CEIS/CNEP — " + (emp ? emp.n : mascara(c)));
+        d.append("from_name", "Consulta de elegibilidade");
+        d.append("nome", form.nome.value);
+        d.append("email", form.email.value);
+        d.append("whatsapp", form.whatsapp.value);
+        d.append("cnpj", mascara(c));
+        d.append("empresa", emp ? emp.n : "");
+        d.append("resultado", (rs || v.t) + " (" + lista.length + " registro(s))");
+        d.append("avisar_em", janela && form.avisar && form.avisar.checked ? br(janela) : "não");
+        d.append("aceita_conteudo", form.conteudo.checked ? "sim" : "não");
+        fetch("https://api.web3forms.com/submit", { method: "POST", body: d })
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (!j.success) throw new Error("recusado");
+            evento("captura_consulta", { avisar: d.get("avisar_em") !== "não" ? 1 : 0 });
+            form.innerHTML = '<p class="rc-cap-ok"><b>Enviado.</b>Confira a sua caixa de entrada' +
+              (janela && d.get("avisar_em") !== "não" ? '. Guardamos a data de ' + esc(br(janela)) + ' para avisar você.' : '.') + '</p>';
+          })
+          .catch(function () {
+            bt.disabled = false; bt.textContent = antes;
+            erro.textContent = "Não consegui enviar agora. Tente de novo em instantes.";
+          });
+      });
       /* A página que hospeda a consulta pode ouvir o resultado (por exemplo, para preencher o formulário). */
       try { document.dispatchEvent(new CustomEvent("consulta-rise:resultado", { detail: { cnpj: c, empresa: emp ? emp.n : "",
         registros: lista.length, tipos: lista.map(function (s) { return tipo(s.c); }) } })); } catch (e) {}
