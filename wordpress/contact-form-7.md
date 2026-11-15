@@ -31,7 +31,10 @@ Apague o conteúdo padrão e cole exatamente isto:
 
 ### Aba "E-mail" — primeira mensagem (chega para você)
 
-- **Para:** o seu e-mail
+- **Para:** um endereço **diferente** do que está em "De". Se os dois forem `contato@danielssouza.com`,
+  o servidor da hospedagem costuma descartar a mensagem em silêncio, porque ela sai dele e volta
+  para a mesma caixa sem autenticação. Use o seu Gmail aqui, ou `contato@danielssouza.com` **depois**
+  de configurar o SMTP (seção 5).
 - **De:** `[_site_title] <contato@danielssouza.com>` — tem de ser um endereço **do seu domínio**
 - **Assunto:** `Consulta CEIS/CNEP — [empresa]`
 - **Responder para:** `[email]`
@@ -199,6 +202,13 @@ Hostinger. Sem isso, a resposta automática pode simplesmente não chegar.
 
 Teste assim: preencha a consulta com um e-mail seu de outro provedor (Gmail, por exemplo) e
 confira se a resposta automática chega, e se não cai em spam.
+
+**Se a resposta automática chegar e o aviso ao escritório não**, o formulário está certo: o
+Contact Form 7 só envia a segunda mensagem depois de a primeira ser aceita. A mensagem foi
+entregue ao servidor e perdida depois dele. Verifique, nesta ordem: a pasta de spam da caixa de
+destino; o endereço em **Configurações → Geral → E-mail de administração**, que é o que
+`[_site_admin_email]` usa; e se remetente e destinatário são a mesma caixa. O SMTP resolve os
+três.
 
 ## 6. Se o formulário da LP também for usar isto
 
