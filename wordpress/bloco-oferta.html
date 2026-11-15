@@ -37,9 +37,6 @@
         <h3 class="ofr-sub">Peça a análise do seu caso</h3>
         <p class="ofr-form-lead">Retorno em até 24 horas úteis. Sem compromisso e sem custo até a proposta.</p>
         <form id="ofr-form" novalidate>
-          <input type="hidden" name="access_key" value="0ea5e920-c227-4deb-bfc7-b73f85ac9990">
-          <input type="hidden" name="subject" value="Novo pedido de análise — Parecer de Elegibilidade">
-          <input type="hidden" name="from_name" value="Página Consulta CEIS/CNEP">
           <input type="hidden" name="origem" id="ofr-origem" value="pagina-consulta">
           <input type="hidden" name="resultado_consulta" id="ofr-resultado" value="">
           <input type="checkbox" name="botcheck" class="ofr-oculto" tabindex="-1" autocomplete="off">
@@ -171,6 +168,21 @@
 <script>
 (function () {
   "use strict";
+
+  /* ------------------------------------------------------------------
+     PARA ONDE O FORMULÁRIO ENVIA. Troque só esta linha.
+
+     Contact Form 7, no próprio site (responde automaticamente a quem pediu):
+       var DESTINO = "https://danielssouza.com/wp-json/contact-form-7/v1/contact-forms/SEU-ID/feedback";
+
+     Web3Forms (sem resposta automática no plano gratuito):
+       var DESTINO = "0ea5e920-c227-4deb-bfc7-b73f85ac9990";
+     ------------------------------------------------------------------ */
+  var DESTINO = "0ea5e920-c227-4deb-bfc7-b73f85ac9990";
+
+  var CF7 = /^https?:/i.test(DESTINO);
+  var URL_ENVIO = CF7 ? DESTINO : "https://api.web3forms.com/submit";
+
   var form = document.getElementById("ofr-form");
   if (!form || form.dataset.pronto) return;
   form.dataset.pronto = "1";
@@ -220,10 +232,18 @@
     var bt = document.getElementById("ofr-enviar"), erro = document.getElementById("ofr-erro"), antes = bt.textContent;
     bt.disabled = true; bt.textContent = "Enviando…"; erro.hidden = true;
     function falhou() { bt.disabled = false; bt.textContent = antes; erro.hidden = false; }
-    fetch("https://api.web3forms.com/submit", { method: "POST", body: new FormData(form) })
+    var dados = new FormData(form);
+    if (CF7) {
+      dados.append("_wpcf7_unit_tag", "parecer-elegibilidade");
+    } else {
+      dados.append("access_key", DESTINO);
+      dados.append("subject", "Novo pedido de análise — Parecer de Elegibilidade");
+      dados.append("from_name", "Página Consulta CEIS/CNEP");
+    }
+    fetch(URL_ENVIO, { method: "POST", body: dados })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (!d.success) return falhou();
+        if (!(d && (d.success === true || d.status === "mail_sent"))) return falhou();
         try { if (typeof fbq === "function") fbq("track", "Lead"); } catch (x) {}
         ev("generate_lead", { form: "parecer-elegibilidade", origem: document.getElementById("ofr-origem").value });
         form.innerHTML = '<div class="ofr-obrigado"><b>Pedido recebido.</b>' +

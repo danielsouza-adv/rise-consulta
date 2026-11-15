@@ -246,7 +246,25 @@
     return { quando: fim, motivo: "fim" };
   }
 
-  var API = { baseDeScript: baseDeScript, proximaJanela: proximaJanela, marcoDeAviso: marcoDeAviso, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
+  /**
+   * Para onde o formulário de captura envia. Aceita duas formas em data-captura:
+   * a chave do Web3Forms, ou a URL do endpoint do Contact Form 7 no próprio site
+   * (…/wp-json/contact-form-7/v1/contact-forms/<id>/feedback).
+   */
+  function destinoCaptura(valor) {
+    var v = String(valor || "").trim();
+    if (!v) return null;
+    if (/^https?:/i.test(v)) return { url: v, cf7: true };
+    return { url: "https://api.web3forms.com/submit", chave: v, cf7: false };
+  }
+
+  /** Resposta de sucesso do Web3Forms ({success:true}) ou do Contact Form 7 ({status:"mail_sent"}). */
+  function enviouOk(resposta) {
+    var j = resposta || {};
+    return j.success === true || j.status === "mail_sent";
+  }
+
+  var API = { destinoCaptura: destinoCaptura, enviouOk: enviouOk, baseDeScript: baseDeScript, proximaJanela: proximaJanela, marcoDeAviso: marcoDeAviso, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
               leiLicitacao: leiLicitacao, nome: nome, alcance: alcance, excesso: excesso, reabilitacao: reabilitacao,
               linhaDoTempo: linhaDoTempo, prazo: prazo, linkContato: linkContato, veredito: veredito, resumo: resumo, data: data };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
@@ -421,7 +439,7 @@
     var contato = raiz.getAttribute("data-contato") || "https://rise.dssouza.com/";
     var whats = digitos(raiz.getAttribute("data-whatsapp"));
     var titulo = raiz.getAttribute("data-titulo") || "Consulta de elegibilidade para licitações";
-    var captura = (raiz.getAttribute("data-captura") || "").trim();   /* chave do Web3Forms; vazio = sem formulário */
+    var captura = destinoCaptura(raiz.getAttribute("data-captura"));  /* nulo = sem formulário de captura */
     if (!document.getElementById("rc-css")) {
       var st = document.createElement("style"); st.id = "rc-css"; st.textContent = CSS; document.head.appendChild(st);
       if (raiz.getAttribute("data-fontes") !== "nao") {
@@ -510,9 +528,13 @@
         var bt = form.querySelector("button"), erro = form.querySelector(".rc-msg"), antes = bt.textContent;
         bt.disabled = true; bt.textContent = "Enviando…"; erro.textContent = "";
         var d = new FormData();
-        d.append("access_key", captura);
-        d.append("subject", "Consulta CEIS/CNEP — " + (emp ? emp.n : mascara(c)));
-        d.append("from_name", "Consulta de elegibilidade");
+        if (captura.cf7) {
+          d.append("_wpcf7_unit_tag", "consulta-rise");
+        } else {
+          d.append("access_key", captura.chave);
+          d.append("subject", "Consulta CEIS/CNEP — " + (emp ? emp.n : mascara(c)));
+          d.append("from_name", "Consulta de elegibilidade");
+        }
         d.append("nome", form.nome.value);
         d.append("email", form.email.value);
         d.append("whatsapp", form.whatsapp.value);
@@ -523,10 +545,10 @@
         d.append("avisar_em", avisar ? br(marco.quando) : "não");
         d.append("motivo_aviso", avisar ? (marco.motivo === "janela" ? "janela de reabilitação" : "fim da sanção") : "—");
         d.append("aceita_conteudo", form.conteudo.checked ? "sim" : "não");
-        fetch("https://api.web3forms.com/submit", { method: "POST", body: d })
+        fetch(captura.url, { method: "POST", body: d })
           .then(function (r) { return r.json(); })
           .then(function (j) {
-            if (!j.success) throw new Error("recusado");
+            if (!enviouOk(j)) throw new Error(j && j.message ? j.message : "recusado");
             evento("captura_consulta", { avisar: d.get("avisar_em") !== "não" ? 1 : 0 });
             form.innerHTML = '<p class="rc-cap-ok"><b>Pedido recebido.</b>O resumo chega ao seu e-mail em até 24 horas úteis' +
               (avisar ? ', e guardamos a data de ' + esc(br(marco.quando)) + ' para avisar você.' : '.') + '</p>';

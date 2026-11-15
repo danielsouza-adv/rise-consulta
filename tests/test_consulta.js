@@ -167,6 +167,27 @@ test("marco de aviso: nada a prometer quando falta data ou só há multa", () =>
   assert.strictEqual(c.marcoDeAviso([], HOJE), null);
 });
 
+test("destino da captura: chave do Web3Forms ou endpoint do Contact Form 7", () => {
+  const w = c.destinoCaptura("0ea5e920-c227-4deb-bfc7-b73f85ac9990");
+  assert.strictEqual(w.cf7, false);
+  assert.strictEqual(w.url, "https://api.web3forms.com/submit");
+  assert.strictEqual(w.chave, "0ea5e920-c227-4deb-bfc7-b73f85ac9990");
+  const f = c.destinoCaptura(" https://danielssouza.com/wp-json/contact-form-7/v1/contact-forms/12/feedback ");
+  assert.strictEqual(f.cf7, true);
+  assert.strictEqual(f.url, "https://danielssouza.com/wp-json/contact-form-7/v1/contact-forms/12/feedback");
+  assert.strictEqual(c.destinoCaptura(""), null);
+  assert.strictEqual(c.destinoCaptura(null), null);
+});
+
+test("envio bem-sucedido nos dois serviços, e recusa em ambos", () => {
+  assert.ok(c.enviouOk({ success: true }));
+  assert.ok(c.enviouOk({ status: "mail_sent", message: "Obrigado" }));
+  assert.ok(!c.enviouOk({ status: "validation_failed" }));
+  assert.ok(!c.enviouOk({ success: false }));
+  assert.ok(!c.enviouOk({}));
+  assert.ok(!c.enviouOk(null));
+});
+
 test("CNPJ: validação e máscara", () => {
   assert.ok(c.cnpjValido("31797544000150"));
   assert.ok(!c.cnpjValido("31797544000151"));
