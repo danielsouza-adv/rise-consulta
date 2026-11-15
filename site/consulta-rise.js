@@ -258,13 +258,18 @@
     return { url: "https://api.web3forms.com/submit", chave: v, cf7: false };
   }
 
+  /** De onde partiu o envio, para separar lead de LP e lead do site. */
+  function origem() {
+    try { return location.hostname || "desconhecida"; } catch (e) { return "desconhecida"; }
+  }
+
   /** Resposta de sucesso do Web3Forms ({success:true}) ou do Contact Form 7 ({status:"mail_sent"}). */
   function enviouOk(resposta) {
     var j = resposta || {};
     return j.success === true || j.status === "mail_sent";
   }
 
-  var API = { destinoCaptura: destinoCaptura, enviouOk: enviouOk, baseDeScript: baseDeScript, proximaJanela: proximaJanela, marcoDeAviso: marcoDeAviso, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
+  var API = { destinoCaptura: destinoCaptura, enviouOk: enviouOk, origem: origem, baseDeScript: baseDeScript, proximaJanela: proximaJanela, marcoDeAviso: marcoDeAviso, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
               leiLicitacao: leiLicitacao, nome: nome, alcance: alcance, excesso: excesso, reabilitacao: reabilitacao,
               linhaDoTempo: linhaDoTempo, prazo: prazo, linkContato: linkContato, veredito: veredito, resumo: resumo, data: data };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
@@ -440,6 +445,7 @@
     var whats = digitos(raiz.getAttribute("data-whatsapp"));
     var titulo = raiz.getAttribute("data-titulo") || "Consulta de elegibilidade para licitações";
     var captura = destinoCaptura(raiz.getAttribute("data-captura"));  /* nulo = sem formulário de captura */
+    var reserva = destinoCaptura(raiz.getAttribute("data-captura-reserva"));  /* tentado se o primeiro falhar */
     if (!document.getElementById("rc-css")) {
       var st = document.createElement("style"); st.id = "rc-css"; st.textContent = CSS; document.head.appendChild(st);
       if (raiz.getAttribute("data-fontes") !== "nao") {
@@ -527,29 +533,43 @@
         ev.preventDefault();
         var bt = form.querySelector("button"), erro = form.querySelector(".rc-msg"), antes = bt.textContent;
         bt.disabled = true; bt.textContent = "Enviando…"; erro.textContent = "";
-        var d = new FormData();
-        if (captura.cf7) {
-          d.append("_wpcf7_unit_tag", "consulta-rise");
-        } else {
-          d.append("access_key", captura.chave);
-          d.append("subject", "Consulta CEIS/CNEP — " + (emp ? emp.n : mascara(c)));
-          d.append("from_name", "Consulta de elegibilidade");
-        }
-        d.append("nome", form.nome.value);
-        d.append("email", form.email.value);
-        d.append("whatsapp", form.whatsapp.value);
-        d.append("cnpj", mascara(c));
-        d.append("empresa", emp ? emp.n : "");
-        d.append("resultado", (rs || v.t) + " (" + lista.length + " registro(s))");
         var avisar = marco && form.avisar && form.avisar.checked;
-        d.append("avisar_em", avisar ? br(marco.quando) : "não");
-        d.append("motivo_aviso", avisar ? (marco.motivo === "janela" ? "janela de reabilitação" : "fim da sanção") : "—");
-        d.append("aceita_conteudo", form.conteudo.checked ? "sim" : "não");
-        fetch(captura.url, { method: "POST", body: d })
-          .then(function (r) { return r.json(); })
-          .then(function (j) {
-            if (!enviouOk(j)) throw new Error(j && j.message ? j.message : "recusado");
-            evento("captura_consulta", { avisar: d.get("avisar_em") !== "não" ? 1 : 0 });
+        var campos = {
+          nome: form.nome.value,
+          email: form.email.value,
+          whatsapp: form.whatsapp.value,
+          cnpj: mascara(c),
+          empresa: emp ? emp.n : "",
+          resultado: (rs || v.t) + " (" + lista.length + " registro(s))",
+          avisar_em: avisar ? br(marco.quando) : "não",
+          motivo_aviso: avisar ? (marco.motivo === "janela" ? "janela de reabilitação" : "fim da sanção") : "—",
+          aceita_conteudo: form.conteudo.checked ? "sim" : "não",
+          origem: origem()
+        };
+
+        /* Envia a um destino e responde se ele aceitou. Nunca rejeita: quem chama decide se tenta o próximo. */
+        function enviar(destino) {
+          if (!destino) return Promise.resolve(false);
+          var d = new FormData();
+          if (destino.cf7) {
+            d.append("_wpcf7_unit_tag", "consulta-rise");
+          } else {
+            d.append("access_key", destino.chave);
+            d.append("subject", "Consulta CEIS/CNEP — " + (emp ? emp.n : mascara(c)));
+            d.append("from_name", "Consulta de elegibilidade");
+          }
+          for (var k in campos) if (campos.hasOwnProperty(k)) d.append(k, campos[k]);
+          return fetch(destino.url, { method: "POST", body: d })
+            .then(function (r) { return r.json(); })
+            .then(enviouOk)
+            .catch(function () { return false; });
+        }
+
+        enviar(captura)
+          .then(function (ok) { return ok || enviar(reserva); })
+          .then(function (ok) {
+            if (!ok) throw new Error("recusado");
+            evento("captura_consulta", { avisar: avisar ? 1 : 0 });
             form.innerHTML = '<p class="rc-cap-ok"><b>Pedido recebido.</b>O resumo chega ao seu e-mail em até 24 horas úteis' +
               (avisar ? ', e guardamos a data de ' + esc(br(marco.quando)) + ' para avisar você.' : '.') + '</p>';
           })
