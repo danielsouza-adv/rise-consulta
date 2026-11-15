@@ -210,8 +210,23 @@ destino; o endereço em **Configurações → Geral → E-mail de administraçã
 `[_site_admin_email]` usa; e se remetente e destinatário são a mesma caixa. O SMTP resolve os
 três.
 
-## 6. Se o formulário da LP também for usar isto
+## 6. A LP em rise.dssouza.com
 
-A LP fica em rise.dssouza.com, domínio diferente do site. O WordPress costuma aceitar pedidos de
-outros domínios, mas isso precisa ser testado: se o envio na LP parar de funcionar depois da
-troca, é esse o motivo, e a solução é manter a LP no Web3Forms ou liberar a origem no servidor.
+A LP usa os mesmos dois formulários, embora esteja noutro domínio. O WordPress devolve o cabeçalho
+que autoriza pedidos de fora, então deve funcionar — mas um plugin de segurança ou o firewall da
+hospedagem pode barrar, e isso só se descobre testando.
+
+Por isso a LP envia com rede de proteção: o primeiro destino é o Contact Form 7 e, se ele falhar, o
+envio é repetido no Web3Forms. O visitante vê sucesso nos dois casos e o lead não se perde; o que
+se perde, se o CF7 falhar, é a resposta automática. Na consulta isso vem do atributo
+`data-captura-reserva`; no formulário do fim da página, da constante `RESERVA`.
+
+Se os envios da LP começarem a chegar só pelo Web3Forms (assunto "Novo lead — Análise R.I.S.E."),
+é sinal de que o CF7 está sendo barrado a partir do outro domínio.
+
+## 7. Saber de onde veio o lead
+
+A consulta manda um campo `origem` com o domínio em que foi preenchida (`danielssouza.com` ou
+`rise.dssouza.com`). Para ver isso no e-mail, acrescente `[text origem]` à aba Formulário do 1830 e
+uma linha `Origem: [origem]` ao corpo da primeira mensagem. Sem isso o campo é simplesmente
+ignorado — nada quebra.

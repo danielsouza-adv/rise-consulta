@@ -179,6 +179,12 @@ test("destino da captura: chave do Web3Forms ou endpoint do Contact Form 7", () 
   assert.strictEqual(c.destinoCaptura(null), null);
 });
 
+test("origem devolve sempre um texto, mesmo fora do navegador", () => {
+  const o = c.origem();
+  assert.strictEqual(typeof o, "string");
+  assert.ok(o.length > 0);
+});
+
 test("envio bem-sucedido nos dois serviços, e recusa em ambos", () => {
   assert.ok(c.enviouOk({ success: true }));
   assert.ok(c.enviouOk({ status: "mail_sent", message: "Obrigado" }));
