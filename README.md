@@ -24,7 +24,7 @@ Opções no `<div>`:
 | `data-contato` | Destino do botão "Pedir análise do caso". URL recebe `?cnpj=...&origem=consulta`; uma âncora (`#contato`) rola a própria página |
 | `data-whatsapp` | Número com DDI e DDD, só dígitos (ex.: `5561999999999`), para mostrar o botão de WhatsApp |
 | `data-titulo` | Título do bloco |
-| `data-captura` | Chave do Web3Forms. Com ela, aparece abaixo do resultado o formulário "Receba este resultado por e-mail", com as opções de aviso da janela e de conteúdo. Sem ela, não há formulário. |
+| `data-captura` | Para onde vai o formulário de captura: a chave do Web3Forms **ou** a URL do Contact Form 7 no próprio site (ver `wordpress/contact-form-7.md`). Com um dos dois, aparece abaixo do resultado o formulário "Receba este resultado por e-mail", com as opções de aviso e de conteúdo. Sem o atributo, não há formulário. |
 | `data-dados` | Pasta dos arquivos de dados, com barra no fim. Sem isso, sai do endereço do script; informe quando um construtor de página reinjetar o script |
 | `data-fontes="nao"` | Não carrega a fonte Playfair Display do Google Fonts (os títulos usam a serifada do sistema) |
 
@@ -33,6 +33,8 @@ Se o Google Analytics 4 estiver no site, a consulta registra os eventos `consult
 ## Captura de contato (opcional)
 
 Com `data-captura`, quem consulta um CNPJ **com sanção** vê, abaixo do resultado, um formulário curto: nome, e-mail e WhatsApp opcional, mais duas caixas — ser avisado quando a janela de reabilitação abrir (com a data calculada para aquele CNPJ) e receber conteúdos. Nada é enviado sem o envio do formulário pela própria pessoa, e o rodapé muda para dizer isso.
+
+Com o Contact Form 7, quem preencheu recebe na hora uma resposta automática saindo do seu domínio; com o Web3Forms gratuito, só o escritório é notificado. O passo a passo está em `wordpress/contact-form-7.md`.
 
 O e-mail que chega traz o CNPJ, a empresa, o resumo dos registros e o campo `avisar_em` com a data da janela — é esse campo que permite montar a rotina de aviso depois.
 

@@ -4,11 +4,15 @@
      data-whatsapp="5561998780564"
      data-dados="https://danielsouza-adv.github.io/rise-consulta/dados/"
      data-captura="0ea5e920-c227-4deb-bfc7-b73f85ac9990"></div>
-<script src="https://danielsouza-adv.github.io/rise-consulta/consulta-rise.js?v=5" defer></script>
+<script src="https://danielsouza-adv.github.io/rise-consulta/consulta-rise.js?v=6" defer></script>
 
-<!-- data-captura é a chave do Web3Forms que recebe o formulário "Receba este resultado por e-mail",
-     exibido abaixo do resultado quando há sanção. Sem esse atributo o formulário não aparece, e o
-     rodapé volta a dizer que o CNPJ não é enviado. É a mesma chave usada na LP do R.I.S.E. -->
+<!-- data-captura liga o formulário "Receba este resultado por e-mail", exibido abaixo do resultado
+     quando há sanção. Sem o atributo, o formulário não aparece e o rodapé volta a dizer que o CNPJ
+     não é enviado. Aceita duas formas:
+       · a chave do Web3Forms (o lead chega ao escritório, sem resposta automática); ou
+       · a URL do Contact Form 7 no próprio site, que responde automaticamente a quem consultou:
+         https://danielssouza.com/wp-json/contact-form-7/v1/contact-forms/<ID>/feedback
+     Como montar os formulários no Contact Form 7: veja wordpress/contact-form-7.md -->
 
 <!-- O ?v=2 no fim do endereço força o navegador a baixar a versão nova em vez da guardada
      em cache. Ao publicar uma mudança na ferramenta, troque para ?v=3, ?v=4 e assim por diante. -->
