@@ -149,19 +149,27 @@ danielssouza.com
 
 ## 3. Ligar os blocos aos formulários
 
-Cada formulário salvo ganha um número, visível na lista de formulários (coluna "Shortcode",
-no trecho `id="123"`). Com os dois números em mãos:
+Os blocos deste repositório já estão ligados aos dois formulários:
+
+| Formulário | Número |
+| --- | --- |
+| Consulta CEIS-CNEP — resumo por e-mail | 1830 |
+| Parecer de Elegibilidade — pedido de análise | 1831 |
+
+O número é o do **post**, visível na barra de endereços ao editar o formulário (`post=1830`). O
+identificador em letras e números que aparece no shortcode não serve aqui: a API REST só aceita o
+número. Se um dia os formulários forem recriados:
 
 **No bloco da consulta** (`bloco-html.html`), troque o valor de `data-captura` pela URL:
 
 ```
-data-captura="https://danielssouza.com/wp-json/contact-form-7/v1/contact-forms/123/feedback"
+data-captura="https://danielssouza.com/wp-json/contact-form-7/v1/contact-forms/1830/feedback"
 ```
 
 **No bloco da oferta** (`bloco-oferta.html`), troque a linha `var DESTINO = …` por:
 
 ```js
-var DESTINO = "https://danielssouza.com/wp-json/contact-form-7/v1/contact-forms/456/feedback";
+var DESTINO = "https://danielssouza.com/wp-json/contact-form-7/v1/contact-forms/1831/feedback";
 ```
 
 Para voltar ao Web3Forms, basta repor a chave no lugar da URL. Os dois blocos aceitam as duas
@@ -169,7 +177,20 @@ formas e se ajustam sozinhos.
 
 ---
 
-## 4. Antes de confiar: o envio de e-mail do WordPress
+## 4. O aviso "configuração de e-mail insegura"
+
+O Contact Form 7 marca os dois formulários com `has config errors` porque o campo "Para" do
+Mail (2) recebe `[email]`, um endereço digitado por quem preenche. É o que queremos — sem isso não
+há resposta automática —, mas é também o que permite a um spammer usar o seu domínio para disparar
+e-mail a terceiros. O formulário funciona normalmente; o risco é de reputação do domínio.
+
+**Não ative o Turnstile nem o reCAPTCHA pelo painel do Contact Form 7.** Os dois esperam que o
+formulário do CF7 seja renderizado na página, e o nosso não é: o CF7 passaria a exigir um token que
+os nossos blocos não enviam, e todo envio pararia. A proteção precisa ser adicionada ao nosso código
+e ao formulário ao mesmo tempo — fica para antes de ligar tráfego pago, que é o que torna o endpoint
+descobrível.
+
+## 5. Antes de confiar: o envio de e-mail do WordPress
 
 Por padrão o WordPress envia e-mail pela função do PHP, que não autentica remetente. O resultado
 costuma ser e-mail na caixa de spam, ou perdido sem aviso. **Instale um plugin de SMTP** (o
@@ -179,7 +200,7 @@ Hostinger. Sem isso, a resposta automática pode simplesmente não chegar.
 Teste assim: preencha a consulta com um e-mail seu de outro provedor (Gmail, por exemplo) e
 confira se a resposta automática chega, e se não cai em spam.
 
-## 5. Se o formulário da LP também for usar isto
+## 6. Se o formulário da LP também for usar isto
 
 A LP fica em rise.dssouza.com, domínio diferente do site. O WordPress costuma aceitar pedidos de
 outros domínios, mas isso precisa ser testado: se o envio na LP parar de funcionar depois da
