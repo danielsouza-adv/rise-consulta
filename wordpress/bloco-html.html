@@ -18,7 +18,14 @@
        · a chave do Web3Forms (o lead chega ao escritório, sem resposta automática); ou
        · a URL do Contact Form 7 no próprio site, que responde automaticamente a quem consultou:
          https://danielssouza.com/wp-json/contact-form-7/v1/contact-forms/<ID>/feedback
-     Como montar os formulários no Contact Form 7: veja wordpress/contact-form-7.md -->
+     Como montar os formulários no Contact Form 7: veja wordpress/contact-form-7.md
+
+     data-api, opcional, liga a consulta ao backend de leads (serviço à parte):
+       data-api="https://rise-leads.SUA-CONTA.workers.dev"
+     Com ele, o resultado vai por e-mail na hora, aparece o botão "Receber no WhatsApp" (que
+     responde sozinho, também na hora) e os lembretes passam a ser automáticos. Ele tem a vez
+     antes de data-captura, que vira reserva. O número em data-whatsapp precisa ser o mesmo
+     cadastrado na API do WhatsApp. -->
 
 <!-- O ?v=2 no fim do endereço força o navegador a baixar a versão nova em vez da guardada
      em cache. Ao publicar uma mudança na ferramenta, troque para ?v=3, ?v=4 e assim por diante. -->
