@@ -25,6 +25,7 @@ Opções no `<div>`:
 | `data-whatsapp` | Número com DDI e DDD, só dígitos (ex.: `5561999999999`), para mostrar o botão de WhatsApp |
 | `data-titulo` | Título do bloco |
 | `data-captura` | Para onde vai o formulário de captura: a chave do Web3Forms **ou** a URL do Contact Form 7 no próprio site (ver `wordpress/contact-form-7.md`). Com um dos dois, aparece abaixo do resultado o formulário "Receba este resultado por e-mail", com as opções de aviso e de conteúdo. Sem o atributo, não há formulário. |
+| `data-api` | Endereço do backend de leads (serviço à parte, opcional). Com ele, o resultado vai por e-mail na hora, aparece o botão "Receber no WhatsApp" com resposta automática e os lembretes são enviados sozinhos. Tem a vez antes de `data-captura`, que vira reserva |
 | `data-dados` | Pasta dos arquivos de dados, com barra no fim. Sem isso, sai do endereço do script; informe quando um construtor de página reinjetar o script |
 | `data-fontes="nao"` | Não carrega a fonte Playfair Display do Google Fonts (os títulos usam a serifada do sistema) |
 
@@ -37,6 +38,12 @@ Com `data-captura`, quem consulta um CNPJ **com sanção** vê, abaixo do result
 Com o Contact Form 7, quem preencheu recebe na hora uma resposta automática saindo do seu domínio; com o Web3Forms gratuito, só o escritório é notificado. O passo a passo está em `wordpress/contact-form-7.md`.
 
 O e-mail que chega traz o CNPJ, a empresa, o resumo dos registros e o campo `avisar_em` com a data da janela — é esse campo que permite montar a rotina de aviso depois.
+
+## Backend de leads (opcional)
+
+Com `data-api`, a consulta conversa com um serviço à parte, mantido em repositório próprio, que envia o resultado na hora (por e-mail ou pelo WhatsApp) e cuida dos avisos pedidos. A página continua estática e a consulta continua sendo feita no navegador: o CNPJ só chega a esse serviço quando a pessoa pede o resultado.
+
+O serviço usa uma cópia de `site/consulta-rise.js` para refazer a consulta com as mesmas regras. Ao mudar uma regra aqui, atualize a cópia de lá.
 
 ## O que a página informa em cada registro
 

@@ -199,3 +199,18 @@ test("CNPJ: validação e máscara", () => {
   assert.ok(!c.cnpjValido("31797544000151"));
   assert.strictEqual(c.mascara("31797544000150"), "31.797.544/0001-50");
 });
+
+test("backend próprio: data-api vira o endereço de captura; chave ou texto solto não servem", () => {
+  assert.deepStrictEqual(c.destinoApi("https://rise-leads.exemplo.workers.dev/"),
+    { url: "https://rise-leads.exemplo.workers.dev/captura", cf7: false, api: true });
+  assert.strictEqual(c.destinoApi("https://api.dssouza.com").url, "https://api.dssouza.com/captura");
+  assert.strictEqual(c.destinoApi("a1b2c3d4-chave"), null);
+  assert.strictEqual(c.destinoApi(""), null);
+  assert.strictEqual(c.destinoApi(null), null);
+});
+
+test("pedido do resultado pelo WhatsApp leva o CNPJ na mensagem, que é o que o backend lê", () => {
+  const link = c.linkWhatsResultado("5561999999999", "11222333000181");
+  assert.ok(link.startsWith("https://wa.me/5561999999999?text="));
+  assert.strictEqual(decodeURIComponent(link.split("?text=")[1]), "Quero receber o resultado da consulta do CNPJ 11.222.333/0001-81");
+});

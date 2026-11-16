@@ -1,6 +1,6 @@
 /*!
  * Consulta de elegibilidade R.I.S.E. · D'Souza Advocacia Empresarial
- * Uso: <div id="consulta-rise" data-contato="URL" data-whatsapp="5561999999999"></div>
+ * Uso: <div id="consulta-rise" data-contato="URL" data-whatsapp="5561999999999" data-api="https://backend"></div>
  *      <script src=".../consulta-rise.js" defer></script>
  * O navegador baixa só o arquivo dos 2 primeiros dígitos do CNPJ: o servidor não sabe qual empresa foi consultada.
  *
@@ -258,6 +258,21 @@
     return { url: "https://api.web3forms.com/submit", chave: v, cf7: false };
   }
 
+  /**
+   * Backend próprio (data-api): recebe o formulário em <endereço>/captura, grava o lead e envia o
+   * resultado na hora. Também é ele que responde, pelo WhatsApp, a quem pede o resultado por lá.
+   */
+  function destinoApi(valor) {
+    var v = String(valor || "").trim().replace(/\/+$/, "");
+    if (!/^https?:\/\//i.test(v)) return null;
+    return { url: v + "/captura", cf7: false, api: true };
+  }
+
+  /** Link que abre o WhatsApp com o pedido pronto. O backend lê o CNPJ da mensagem e responde com o resultado. */
+  function linkWhatsResultado(whats, cnpj) {
+    return "https://wa.me/" + whats + "?text=" + encodeURIComponent("Quero receber o resultado da consulta do CNPJ " + mascara(cnpj));
+  }
+
   /** De onde partiu o envio, para separar lead de LP e lead do site. */
   function origem() {
     try { return location.hostname || "desconhecida"; } catch (e) { return "desconhecida"; }
@@ -269,7 +284,7 @@
     return j.success === true || j.status === "mail_sent";
   }
 
-  var API = { destinoCaptura: destinoCaptura, enviouOk: enviouOk, origem: origem, baseDeScript: baseDeScript, proximaJanela: proximaJanela, marcoDeAviso: marcoDeAviso, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
+  var API = { destinoCaptura: destinoCaptura, destinoApi: destinoApi, linkWhatsResultado: linkWhatsResultado, enviouOk: enviouOk, origem: origem, baseDeScript: baseDeScript, proximaJanela: proximaJanela, marcoDeAviso: marcoDeAviso, cnpjValido: cnpjValido, mascara: mascara, moeda: moeda, frase: frase, tipo: tipo, leis: leis, lei: lei,
               leiLicitacao: leiLicitacao, nome: nome, alcance: alcance, excesso: excesso, reabilitacao: reabilitacao,
               linhaDoTempo: linhaDoTempo, prazo: prazo, linkContato: linkContato, veredito: veredito, resumo: resumo, data: data };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
@@ -379,6 +394,7 @@
     ".rc-check{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:0.938em;line-height:1.45;cursor:pointer}",
     ".rc-check input{margin:3px 0 0;flex:none;width:16px;height:16px;accent-color:var(--rc-goldtx)}",
     ".rc-cap button{margin-top:16px}",
+    ".rc-cap .rc-cap-whats{margin-top:14px}.rc-cap > p.rc-cap-ou{margin-top:18px}",
     ".rc-cap-leg{margin-top:12px;font-size:0.812em;line-height:1.5;color:var(--rc-mut)}",
     ".rc-cap .rc-msg{color:var(--rc-red);margin-top:10px;font-size:0.938em}",
     ".rc-cap-ok{font-size:1em;color:var(--rc-grn)}",
@@ -446,6 +462,9 @@
     var titulo = raiz.getAttribute("data-titulo") || "Consulta de elegibilidade para licitações";
     var captura = destinoCaptura(raiz.getAttribute("data-captura"));  /* nulo = sem formulário de captura */
     var reserva = destinoCaptura(raiz.getAttribute("data-captura-reserva"));  /* tentado se o primeiro falhar */
+    var api = destinoApi(raiz.getAttribute("data-api"));              /* backend próprio: tem a vez antes dos outros dois */
+    var temForm = !!(api || captura);
+    var whatsRes = !!(api && whats);                                  /* resultado na hora pelo WhatsApp: só com o backend */
     if (!document.getElementById("rc-css")) {
       var st = document.createElement("style"); st.id = "rc-css"; st.textContent = CSS; document.head.appendChild(st);
       if (raiz.getAttribute("data-fontes") !== "nao") {
@@ -462,8 +481,9 @@
       '<div class="rc-msg" role="alert" aria-live="polite"></div></div>' +
       '<div class="rc-res" aria-live="polite"></div>' +
       '<p class="rc-aviso">Dados públicos do Portal da Transparência (CEIS e CNEP)<span class="rc-atual"></span>. ' +
-      'A consulta é feita no seu navegador: ' + (captura
-        ? 'o CNPJ só sai daqui se você pedir o resultado por e-mail no formulário acima.'
+      'A consulta é feita no seu navegador: ' + (whatsRes
+        ? 'o CNPJ só sai daqui se você pedir o resultado pelo WhatsApp ou por e-mail, acima.'
+        : temForm ? 'o CNPJ só sai daqui se você pedir o resultado por e-mail no formulário acima.'
         : 'o CNPJ digitado não é enviado nem armazenado.') +
       ' As informações têm caráter informativo e não substituem a leitura do ato punitivo nem a análise jurídica do caso.</p>';
     var input = raiz.querySelector("input"), msg = raiz.querySelector(".rc-msg"), res = raiz.querySelector(".rc-res");
@@ -510,9 +530,14 @@
           '</div></div>';
       }
       var marco = marcoDeAviso(lista, hoje);
-      if (captura && lista.length) {
-        h += '<form class="rc-cap"><strong>Receba este resultado por e-mail</strong>' +
-          '<p>Enviamos o resumo das sanções e as datas em até 24 horas úteis, para você guardar ou mostrar ao seu contador.</p>' +
+      if (temForm && lista.length) {
+        h += '<form class="rc-cap"><strong>' + (whatsRes ? 'Receba este resultado' : 'Receba este resultado por e-mail') + '</strong>' +
+          (whatsRes
+            ? '<p>No WhatsApp, o resumo das sanções e as datas chegam na hora, para você guardar ou mostrar ao seu contador.</p>' +
+              '<a class="rc-btn rc-cap-whats" target="_blank" rel="noopener" href="' + esc(linkWhatsResultado(whats, c)) + '">Receber no WhatsApp</a>' +
+              '<p class="rc-cap-ou">Ou, se preferir, por e-mail:</p>'
+            : '<p>Enviamos ' + (api ? 'agora o resumo das sanções e as datas' : 'o resumo das sanções e as datas em até 24 horas úteis') +
+              ', para você guardar ou mostrar ao seu contador.</p>') +
           '<div class="rc-cap-campos">' +
           '<input type="text" name="nome" placeholder="Seu nome" autocomplete="name" required>' +
           '<input type="email" name="email" placeholder="E-mail" autocomplete="email" required>' +
@@ -553,7 +578,7 @@
           var d = new FormData();
           if (destino.cf7) {
             d.append("_wpcf7_unit_tag", "consulta-rise");
-          } else {
+          } else if (!destino.api) {
             d.append("access_key", destino.chave);
             d.append("subject", "Consulta CEIS/CNEP — " + (emp ? emp.n : mascara(c)));
             d.append("from_name", "Consulta de elegibilidade");
@@ -565,12 +590,15 @@
             .catch(function () { return false; });
         }
 
-        enviar(captura)
+        var naHora = false;                 /* o backend próprio envia o e-mail na hora; os outros, não */
+        enviar(api)
+          .then(function (ok) { naHora = ok; return ok || enviar(captura); })
           .then(function (ok) { return ok || enviar(reserva); })
           .then(function (ok) {
             if (!ok) throw new Error("recusado");
             evento("captura_consulta", { avisar: avisar ? 1 : 0 });
-            form.innerHTML = '<p class="rc-cap-ok"><b>Pedido recebido.</b>O resumo chega ao seu e-mail em até 24 horas úteis' +
+            form.innerHTML = '<p class="rc-cap-ok">' + (naHora ? '<b>Resultado enviado.</b>O resumo já está a caminho do seu e-mail'
+              : '<b>Pedido recebido.</b>O resumo chega ao seu e-mail em até 24 horas úteis') +
               (avisar ? ', e guardamos a data de ' + esc(br(marco.quando)) + ' para avisar você.' : '.') + '</p>';
           })
           .catch(function () {
@@ -581,6 +609,8 @@
       /* A página que hospeda a consulta pode ouvir o resultado (por exemplo, para preencher o formulário). */
       try { document.dispatchEvent(new CustomEvent("consulta-rise:resultado", { detail: { cnpj: c, empresa: emp ? emp.n : "",
         registros: lista.length, tipos: lista.map(function (s) { return tipo(s.c); }) } })); } catch (e) {}
+      var wr = res.querySelector(".rc-cap-whats");
+      if (wr) wr.addEventListener("click", function () { evento("clique_whatsapp_resultado", {}); });
       Array.prototype.forEach.call(res.querySelectorAll(".rc-cta a"), function (a) {
         a.addEventListener("click", function () { evento("clique_contato_consulta", { canal: a.classList.contains("rc-cta-whats") ? "whatsapp" : "formulario" }); });
       });
