@@ -293,6 +293,43 @@
   /* ------------------------------------------------------------------ tela */
 
   var SCRIPT = document.currentScript;          /* precisa ser lido aqui, no topo */
+
+  /* Turnstile (Cloudflare): prova, sem pedir nada à pessoa na maioria dos casos, que há um navegador de
+     verdade enviando o formulário. O script é carregado uma vez, só quando o formulário aparece. */
+  var tsFila = null;
+  function tsCarregar() {
+    if (tsFila) return tsFila;
+    tsFila = new Promise(function (ok) {
+      if (window.turnstile) return ok(window.turnstile);
+      window.__rcTurnstile = function () { ok(window.turnstile); };
+      var s = document.createElement("script");
+      s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__rcTurnstile";
+      s.async = true; s.defer = true;
+      s.onerror = function () { ok(null); };          /* bloqueado ou fora do ar: segue sem ele */
+      document.head.appendChild(s);
+    });
+    return tsFila;
+  }
+  function turnstile(caixa, chave) {
+    var id = null, api = null;
+    tsCarregar().then(function (t) {
+      if (!t) return;
+      try { api = t; id = t.render(caixa, { sitekey: chave, action: "captura", language: "pt-br", appearance: "interaction-only", size: "flexible" }); }
+      catch (e) { api = null; }
+    });
+    function ler() { try { return api && id != null ? (api.getResponse(id) || "") : ""; } catch (e) { return ""; } }
+    return {
+      /* espera o código por até 8 segundos; devolve "" se ele não vier */
+      codigo: function () {
+        return new Promise(function (ok) {
+          var n = 0;
+          (function olhar() { var c = ler(); if (c || ++n > 32) return ok(c); setTimeout(olhar, 250); })();
+        });
+      },
+      /* cada código vale para um único envio */
+      renovar: function () { try { if (api && id != null) api.reset(id); } catch (e) {} }
+    };
+  }
   var PADRAO = "https://danielsouza-adv.github.io/rise-consulta/dados/";
 
   /* Onde buscar os dados. Construtores de página e otimizadores às vezes reinjetam o script,
@@ -394,6 +431,7 @@
     ".rc-check{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:0.938em;line-height:1.45;cursor:pointer}",
     ".rc-check input{margin:3px 0 0;flex:none;width:16px;height:16px;accent-color:var(--rc-goldtx)}",
     ".rc-cap button{margin-top:16px}",
+    ".rc-cap .rc-ts{margin-top:14px}.rc-cap .rc-ts:empty{margin-top:0}.rc-cap-leg a{color:inherit;text-decoration:underline}",
     ".rc-cap .rc-cap-whats{margin-top:14px}.rc-cap > p.rc-cap-ou{margin-top:18px}",
     ".rc-cap-leg{margin-top:12px;font-size:0.812em;line-height:1.5;color:var(--rc-mut)}",
     ".rc-cap .rc-msg{color:var(--rc-red);margin-top:10px;font-size:0.938em}",
@@ -462,6 +500,8 @@
     var titulo = raiz.getAttribute("data-titulo") || "Consulta de elegibilidade para licitações";
     var captura = destinoCaptura(raiz.getAttribute("data-captura"));  /* nulo = sem formulário de captura */
     var reserva = destinoCaptura(raiz.getAttribute("data-captura-reserva"));  /* tentado se o primeiro falhar */
+    var chaveTs = String(raiz.getAttribute("data-turnstile") || "").trim();   /* chave do site no Turnstile (só vale com data-api) */
+    var politica = raiz.getAttribute("data-privacidade") || "https://danielssouza.com/politica-de-privacidade/";
     var api = destinoApi(raiz.getAttribute("data-api"));              /* backend próprio: tem a vez antes dos outros dois */
     var temForm = !!(api || captura);
     var whatsRes = !!(api && whats);                                  /* resultado na hora pelo WhatsApp: só com o backend */
@@ -547,13 +587,16 @@
             ', em ' + esc(br(marco.quando)) + '.</span></label>' : "") +
           '<label class="rc-check"><input type="checkbox" name="conteudo">' +
           '<span>Quero receber conteúdos sobre licitações e reabilitação.</span></label>' +
+          (api && chaveTs ? '<div class="rc-ts"></div>' : "") +
           '<button class="rc-btn" type="submit">Enviar para o meu e-mail</button>' +
-          '<p class="rc-cap-leg">Usamos seus dados para este envio e para o que você marcar acima. ' +
-          'Nada é compartilhado com terceiros, e você pode pedir a exclusão quando quiser.</p>' +
+          '<p class="rc-cap-leg">Usamos seus dados para este envio e para o que você marcar acima, conforme a nossa ' +
+          '<a href="' + esc(politica) + '" target="_blank" rel="noopener">Política de Privacidade</a>. ' +
+          'Você pode pedir a exclusão quando quiser.</p>' +
           '<p class="rc-msg" role="alert"></p></form>';
       }
       res.innerHTML = h;
       var form = res.querySelector(".rc-cap");
+      var ts = form && form.querySelector(".rc-ts") ? turnstile(form.querySelector(".rc-ts"), chaveTs) : null;
       if (form) form.addEventListener("submit", function (ev) {
         ev.preventDefault();
         var bt = form.querySelector("button"), erro = form.querySelector(".rc-msg"), antes = bt.textContent;
@@ -584,6 +627,7 @@
             d.append("from_name", "Consulta de elegibilidade");
           }
           for (var k in campos) if (campos.hasOwnProperty(k)) d.append(k, campos[k]);
+          if (destino.api && destino.codigo) d.append("cf-turnstile-response", destino.codigo);
           return fetch(destino.url, { method: "POST", body: d })
             .then(function (r) { return r.json(); })
             .then(enviouOk)
@@ -591,8 +635,10 @@
         }
 
         var naHora = false;                 /* o backend próprio envia o e-mail na hora; os outros, não */
-        enviar(api)
-          .then(function (ok) { naHora = ok; return ok || enviar(captura); })
+        /* o backend confere o código do Turnstile; sem código ele recusa e o envio segue para o destino reserva */
+        (ts ? ts.codigo() : Promise.resolve(""))
+          .then(function (codigo) { return enviar(api ? { url: api.url, api: true, codigo: codigo } : null); })
+          .then(function (ok) { naHora = ok; if (ts) ts.renovar(); return ok || enviar(captura); })
           .then(function (ok) { return ok || enviar(reserva); })
           .then(function (ok) {
             if (!ok) throw new Error("recusado");
