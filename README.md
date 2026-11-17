@@ -26,6 +26,8 @@ Opções no `<div>`:
 | `data-titulo` | Título do bloco |
 | `data-captura` | Para onde vai o formulário de captura: a chave do Web3Forms **ou** a URL do Contact Form 7 no próprio site (ver `wordpress/contact-form-7.md`). Com um dos dois, aparece abaixo do resultado o formulário "Receba este resultado por e-mail", com as opções de aviso e de conteúdo. Sem o atributo, não há formulário. |
 | `data-api` | Endereço do backend de leads (serviço à parte, opcional). Com ele, o resultado vai por e-mail na hora, aparece o botão "Receber no WhatsApp" com resposta automática e os lembretes são enviados sozinhos. Tem a vez antes de `data-captura`, que vira reserva |
+| `data-turnstile` | Chave do site no Cloudflare Turnstile. Com ela (e com `data-api`), o formulário de e-mail prova ao backend que foi enviado por um navegador de verdade. Na maioria dos casos a pessoa não vê nada. Sem a chave, nada muda |
+| `data-privacidade` | Endereço da política de privacidade citada abaixo do formulário. Padrão: a do site do escritório |
 | `data-dados` | Pasta dos arquivos de dados, com barra no fim. Sem isso, sai do endereço do script; informe quando um construtor de página reinjetar o script |
 | `data-fontes="nao"` | Não carrega a fonte Playfair Display do Google Fonts (os títulos usam a serifada do sistema) |
 
