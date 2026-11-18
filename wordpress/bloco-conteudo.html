@@ -1,0 +1,189 @@
+<!-- Três seções de conteúdo da página da consulta, no padrão da marca.
+     Vão num único widget HTML do Elementor, entre a consulta e a seção do parecer,
+     substituindo as versões em texto do editor.
+     Se preferir separar, cada <section> pode ir num widget próprio: o CSS está no fim e
+     serve às três. -->
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@600;700&display=swap">
+
+<div id="ctd-dsouza">
+
+  <!-- 1 ............................................................. cadastros -->
+  <section class="ctd-sec">
+    <p class="ctd-eyebrow">Os dois cadastros</p>
+    <h2 class="ctd-h2">Onde a sua empresa aparece, e o que cada cadastro significa</h2>
+    <div class="ctd-duo">
+      <div class="ctd-card">
+        <h3>CEIS</h3>
+        <p class="ctd-card-sub">Cadastro Nacional de Empresas Inidôneas e Suspensas</p>
+        <p>Reúne as empresas punidas com <b>suspensão</b>, <b>impedimento de licitar e contratar</b> ou
+        <b>declaração de inidoneidade</b>, aplicadas por órgãos da União, dos estados e dos municípios.</p>
+      </div>
+      <div class="ctd-card">
+        <h3>CNEP</h3>
+        <p class="ctd-card-sub">Cadastro Nacional de Empresas Punidas</p>
+        <p>Reúne as sanções da <b>Lei Anticorrupção</b> (Lei 12.846/2013) — multas, publicação extraordinária
+        da decisão e os acordos de leniência celebrados.</p>
+      </div>
+    </div>
+    <p class="ctd-nota">Os dois são mantidos pela Controladoria-Geral da União e publicados no Portal da
+    Transparência. É deles que sai o resultado da consulta acima — e é neles que o pregoeiro olha.</p>
+  </section>
+
+  <!-- 2 ............................................................. alcance -->
+  <section class="ctd-sec">
+    <p class="ctd-eyebrow">O que muda de uma sanção para outra</p>
+    <h2 class="ctd-h2">Onde a sua empresa não pode licitar</h2>
+    <p class="ctd-lead">Estar no CEIS não quer dizer estar fora de todas as licitações do país. O que define
+    isso é o tipo da sanção e a lei em vigor quando ela foi aplicada.</p>
+
+    <div class="ctd-tab-wrap">
+      <table class="ctd-tab">
+        <thead>
+          <tr><th>Sanção</th><th>Onde alcança</th><th>Prazo</th><th>Antecipação</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Impedimento de licitar e contratar</b><span>Lei 14.133/2021, art. 156, III e § 4º</span></td>
+            <td><span class="ctd-esc" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span>
+                Administração direta e indireta <b>do ente que aplicou</b> — só a União, só aquele estado
+                ou só aquele município</td>
+            <td>Até 3 anos</td>
+            <td class="ctd-sim">Sim, após 1 ano<span>art. 163</span></td>
+          </tr>
+          <tr>
+            <td><b>Declaração de inidoneidade</b><span>Lei 14.133/2021, art. 156, IV e § 5º</span></td>
+            <td><span class="ctd-esc" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></span>
+                <b>Toda a Administração Pública</b>, de todos os entes federativos</td>
+            <td>De 3 a 6 anos</td>
+            <td class="ctd-sim">Sim, após 3 anos<span>art. 163</span></td>
+          </tr>
+          <tr>
+            <td><b>Impedimento do pregão</b><span>Lei 10.520/2002, art. 7º</span></td>
+            <td><span class="ctd-esc" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span>
+                O ente que aplicou, com descredenciamento no Sicaf</td>
+            <td>Até 5 anos</td>
+            <td class="ctd-nao">Não há previsão<span>só o decurso do prazo</span></td>
+          </tr>
+          <tr>
+            <td><b>Suspensão temporária</b><span>Lei 8.666/1993, art. 87, III</span></td>
+            <td><span class="ctd-esc" aria-hidden="true"><i class="on"></i><i class="meio"></i><i class="meio"></i></span>
+                <b>Controvertido.</b> Há quem leia como restrita ao órgão que aplicou, e há decisão judicial
+                recente que a trata como extensiva a toda a Administração</td>
+            <td>Até 2 anos</td>
+            <td class="ctd-nao">Não há previsão<span>só o decurso do prazo</span></td>
+          </tr>
+          <tr>
+            <td><b>Declaração de inidoneidade</b><span>Lei 8.666/1993, art. 87, IV</span></td>
+            <td><span class="ctd-esc" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></span>
+                <b>Toda a Administração Pública</b></td>
+            <td>Enquanto durarem os motivos</td>
+            <td class="ctd-sim">Sim, após 2 anos<span>art. 87, § 3º</span></td>
+          </tr>
+          <tr>
+            <td><b>Multa da Lei Anticorrupção</b><span>Lei 12.846/2013</span></td>
+            <td><span class="ctd-esc" aria-hidden="true"><i></i><i></i><i></i></span>
+                Por si só, <b>não impede</b> a empresa de licitar</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="ctd-nota">A Lei 8.666/1993 foi revogada, mas continua a reger os contratos assinados sob ela
+    (Lei 14.133/2021, art. 190) e as sanções aplicadas na sua vigência.</p>
+
+    <div class="ctd-dest">
+      <p><b>Duas empresas que aparecem no CEIS podem estar em situações opostas.</b> Uma, impedida apenas
+      perante um município, segue livre para licitar com a União e com os demais estados. Outra está fora
+      de toda a Administração. A diferença não está no cadastro — está no ato punitivo e na lei vigente
+      quando ele foi editado. É a primeira pergunta que o parecer responde.</p>
+    </div>
+  </section>
+
+  <!-- 3 ............................................................. reabilitação -->
+  <section class="ctd-sec">
+    <p class="ctd-eyebrow">O caminho para antecipar</p>
+    <h2 class="ctd-h2">Quando é possível pedir a reabilitação</h2>
+    <p class="ctd-lead">A Lei 14.133/2021, no art. 163, permite pedir a reabilitação à própria autoridade
+    que aplicou a sanção — antes do fim do prazo. Os cinco requisitos são cumulativos: falta um, não há pedido.</p>
+
+    <ol class="ctd-req">
+      <li><b>Reparação integral do dano</b> causado à Administração Pública.</li>
+      <li><b>Pagamento da multa</b> aplicada.</li>
+      <li><b>Prazo mínimo cumprido</b> — 1 ano, no impedimento; 3 anos, na declaração de inidoneidade.</li>
+      <li><b>Condições do ato punitivo atendidas</b>, quando o ato tiver fixado alguma.</li>
+      <li><b>Análise jurídica prévia</b>, com posicionamento conclusivo sobre o atendimento dos requisitos.</li>
+    </ol>
+
+    <p class="ctd-nota">Nas infrações dos incisos VIII e XII do art. 155 — documentação falsa e ato lesivo
+    da Lei Anticorrupção — exige-se também a implantação ou o aperfeiçoamento de <b>programa de
+    integridade</b>, nos parâmetros do Decreto 12.304/2024 e da Portaria Normativa SE/CGU nº 226/2025.</p>
+
+    <div class="ctd-dest">
+      <p>Saber quais desses requisitos a sua empresa já cumpre, quais faltam e em quanto tempo a
+      antecipação é possível depende da leitura do ato punitivo e do processo administrativo.
+      <b>É exatamente isso que o Parecer de Elegibilidade entrega.</b></p>
+    </div>
+  </section>
+
+</div>
+
+<style>
+#ctd-dsouza{font-family:'Lora',Georgia,serif;color:#1A2B3C;background:#fff;
+  font-variant-numeric:lining-nums tabular-nums;-webkit-font-smoothing:antialiased}
+#ctd-dsouza *{box-sizing:border-box}
+#ctd-dsouza .ctd-sec{max-width:1040px;margin:0 auto;padding:56px 20px 8px}
+#ctd-dsouza .ctd-sec+.ctd-sec{border-top:1px solid #E8E2D4}
+#ctd-dsouza .ctd-eyebrow{font-family:'DM Mono',ui-monospace,monospace;font-size:12.5px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;color:#7A5C1E;margin:0 0 12px}
+#ctd-dsouza .ctd-h2{font-family:'Playfair Display','Palatino Linotype',Georgia,serif;font-size:32px;
+  line-height:1.2;font-weight:700;color:#1A2B3C;margin:0 0 18px;letter-spacing:0}
+#ctd-dsouza .ctd-lead{font-size:19px;line-height:1.65;margin:0 0 26px;max-width:68ch}
+#ctd-dsouza .ctd-nota{font-size:15.5px;line-height:1.6;color:#566472;margin:18px 0 0;max-width:72ch}
+#ctd-dsouza b{font-weight:600}
+
+#ctd-dsouza .ctd-duo{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:4px}
+#ctd-dsouza .ctd-card{background:#F7F4EE;border-left:3px solid #C8A96E;padding:24px 26px}
+#ctd-dsouza .ctd-card h3{font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;
+  margin:0 0 2px;color:#1A2B3C}
+#ctd-dsouza .ctd-card-sub{font-size:13.5px;color:#7A5C1E;margin:0 0 16px;padding-bottom:14px;
+  line-height:1.4;border-bottom:1px solid #E0D8C4}
+#ctd-dsouza .ctd-card p{font-size:16.5px;line-height:1.6;margin:0;color:#566472}
+
+#ctd-dsouza .ctd-tab-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+#ctd-dsouza .ctd-tab{width:100%;min-width:720px;border-collapse:collapse;font-size:15.5px}
+#ctd-dsouza .ctd-tab th{background:#F7F4EE;font-family:'DM Mono',ui-monospace,monospace;font-size:11.5px;
+  font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#7A5C1E;text-align:left;
+  padding:12px 14px;border-bottom:1px solid #D4C9B0}
+#ctd-dsouza .ctd-tab td{padding:16px 14px;border-bottom:1px solid #E8E2D4;vertical-align:top;
+  line-height:1.5;color:#566472}
+#ctd-dsouza .ctd-tab td b{color:#1A2B3C}
+#ctd-dsouza .ctd-tab td span{display:block;font-size:13px;color:#8A8578;margin-top:3px}
+#ctd-dsouza .ctd-tab td.ctd-sim b,#ctd-dsouza .ctd-tab td.ctd-sim{color:#1D6341;font-weight:600}
+#ctd-dsouza .ctd-tab td.ctd-nao{color:#8A6500;font-weight:600}
+#ctd-dsouza .ctd-esc{display:inline-flex!important;gap:3px;margin:0 8px 0 0;vertical-align:1px}
+#ctd-dsouza .ctd-esc i{width:9px;height:9px;background:#E8E2D4;display:block;margin:0}
+#ctd-dsouza .ctd-esc i.on{background:#C8A96E}
+#ctd-dsouza .ctd-esc i.meio{background:repeating-linear-gradient(45deg,#C8A96E 0 2px,#E8E2D4 2px 4px)}
+
+#ctd-dsouza .ctd-req{counter-reset:r;list-style:none;margin:0;padding:0;display:grid;gap:12px}
+#ctd-dsouza .ctd-req li{counter-increment:r;position:relative;padding:0 0 0 46px;font-size:17px;
+  line-height:1.6;color:#566472;margin:0}
+#ctd-dsouza .ctd-req li::before{content:counter(r);position:absolute;left:0;top:-1px;width:30px;height:30px;
+  background:#F7F4EE;border:1px solid #D4C9B0;color:#7A5C1E;font-family:'DM Mono',ui-monospace,monospace;
+  font-size:14px;display:flex;align-items:center;justify-content:center}
+
+#ctd-dsouza .ctd-dest{margin:26px 0 0;padding:20px 24px;background:#F7F4EE;border-left:4px solid #C8A96E}
+#ctd-dsouza .ctd-dest p{margin:0;font-size:17.5px;line-height:1.65;color:#1A2B3C;max-width:74ch}
+
+@media (max-width:820px){
+  #ctd-dsouza .ctd-sec{padding:44px 16px 8px}
+  #ctd-dsouza .ctd-h2{font-size:26px}
+  #ctd-dsouza .ctd-lead{font-size:17.5px}
+  #ctd-dsouza .ctd-duo{grid-template-columns:1fr;gap:16px}
+  #ctd-dsouza .ctd-dest p{font-size:16.5px}
+}
+</style>
