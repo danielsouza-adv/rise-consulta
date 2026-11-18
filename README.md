@@ -41,6 +41,15 @@ Com o Contact Form 7, quem preencheu recebe na hora uma resposta automática sai
 
 O e-mail que chega traz o CNPJ, a empresa, o resumo dos registros e o campo `avisar_em` com a data da janela — é esse campo que permite montar a rotina de aviso depois.
 
+## Blocos da página no WordPress
+
+| Arquivo | Onde entra |
+| --- | --- |
+| `wordpress/bloco-html.html` | a consulta |
+| `wordpress/bloco-autoridade.html` | "Quem assina o parecer", entre a seção do parecer e o formulário |
+| `wordpress/bloco-oferta.html` | o formulário de pedido de análise, no fim da página |
+| `wordpress/politica-de-privacidade.html` | a página da política |
+
 ## Backend de leads (opcional)
 
 Com `data-api`, a consulta conversa com um serviço à parte, mantido em repositório próprio, que envia o resultado na hora (por e-mail ou pelo WhatsApp) e cuida dos avisos pedidos. A página continua estática e a consulta continua sendo feita no navegador: o CNPJ só chega a esse serviço quando a pessoa pede o resultado.

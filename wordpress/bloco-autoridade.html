@@ -1,0 +1,70 @@
+<!-- Bloco "Quem assina" — vai entre a seção do Parecer de Elegibilidade e o formulário.
+     Cole num widget HTML do Elementor, em largura total.
+
+     A foto vem da biblioteca de mídia do WordPress. Ao trocar a imagem, troque a URL no src. -->
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@700&display=swap">
+
+<section id="aut-dsouza">
+  <div class="aut-wrap">
+    <img class="aut-foto" src="https://danielssouza.com/wp-content/uploads/2025/11/68f64a7ec51b4.jpeg"
+         alt="Daniel de Souza, advogado" loading="lazy" width="240" height="312">
+    <div class="aut-txt">
+      <p class="aut-eyebrow">Quem assina o parecer</p>
+      <h2 class="aut-nome">Daniel de Souza</h2>
+      <p class="aut-oab">Advogado &middot; OAB/DF 71.124 &middot; D&rsquo;Souza Advocacia Empresarial</p>
+
+      <p class="aut-lead">A consulta que você acabou de usar foi construída por mim. Ela lê os
+      mesmos cadastros que o pregoeiro consulta e aplica a lei vigente ao tempo de cada sanção —
+      que é o detalhe onde a maioria das análises erra.</p>
+
+      <ul class="aut-pontos">
+        <li><b>Programa de integridade, na prática.</b> Coordeno governança, riscos e controles
+        numa operadora de saúde regulada pela ANS, onde estruturei do zero o mesmo tipo de programa
+        que a lei exige de quem pede reabilitação.</li>
+        <li><b>Dez anos em tecnologia antes do Direito.</b> Daí vem o hábito de tratar o processo
+        sancionador como um sistema: onde falhou, o que precisa ser demonstrado e em que ordem.</li>
+        <li><b>Direito Digital, Compliance e Governança Corporativa.</b> Especializações na área
+        em que o seu caso será decidido, não em outra.</li>
+      </ul>
+
+      <p class="aut-fecho">Quem lê o seu ato punitivo e assina o parecer sou eu. Não há repasse
+      para estagiário nem para escritório parceiro.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+#aut-dsouza{background:#F7F4EE;padding:64px 20px;margin:0;font-family:'Lora',Georgia,serif;
+  font-variant-numeric:lining-nums tabular-nums;-webkit-font-smoothing:antialiased}
+#aut-dsouza *{box-sizing:border-box}
+#aut-dsouza .aut-wrap{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:240px 1fr;
+  gap:48px;align-items:start}
+#aut-dsouza .aut-foto{width:240px!important;height:312px!important;object-fit:cover;
+  object-position:center top;border:1px solid rgba(200,169,110,.55);border-radius:0!important;
+  filter:grayscale(12%);display:block;max-width:100%}
+#aut-dsouza .aut-txt{min-width:0}
+#aut-dsouza .aut-eyebrow{font-family:'DM Mono',ui-monospace,monospace;font-size:12.5px;
+  font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:#7A5C1E;margin:0 0 14px}
+#aut-dsouza .aut-nome{font-family:'Playfair Display','Palatino Linotype',Georgia,serif;
+  font-size:34px;line-height:1.15;font-weight:700;color:#1A2B3C;margin:0 0 6px;letter-spacing:0}
+#aut-dsouza .aut-oab{font-size:15px;color:#566472;margin:0 0 24px;padding-bottom:20px;
+  border-bottom:1px solid #D4C9B0}
+#aut-dsouza .aut-lead{font-size:19px;line-height:1.65;color:#1A2B3C;margin:0 0 22px;max-width:62ch}
+#aut-dsouza .aut-pontos{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:14px}
+#aut-dsouza .aut-pontos li{position:relative;padding-left:20px;font-size:16.5px;line-height:1.6;
+  color:#566472;max-width:64ch;margin:0}
+#aut-dsouza .aut-pontos li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;
+  background:#C8A96E}
+#aut-dsouza .aut-pontos b{color:#1A2B3C;font-weight:600}
+#aut-dsouza .aut-fecho{font-size:17.5px;line-height:1.6;color:#1A2B3C;margin:0;padding:16px 0 0 18px;
+  border-left:3px solid #C8A96E}
+@media (max-width:820px){
+  #aut-dsouza{padding:48px 16px}
+  #aut-dsouza .aut-wrap{grid-template-columns:1fr;gap:28px;justify-items:start}
+  #aut-dsouza .aut-foto{width:200px!important;height:260px!important}
+  #aut-dsouza .aut-nome{font-size:28px}
+  #aut-dsouza .aut-lead{font-size:17.5px}
+}
+</style>
