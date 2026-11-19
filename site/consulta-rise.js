@@ -437,7 +437,7 @@
     ".rc-cap .rc-msg{color:var(--rc-red);margin-top:10px;font-size:0.938em}",
     ".rc-cap-ok{font-size:1em;color:var(--rc-grn)}",
     ".rc-cap-ok b{display:block;font-family:var(--rc-serif);font-size:1.188em;margin-bottom:4px}",
-    ".rc-aviso{padding:18px 32px 22px;font-size:0.812em;line-height:1.55;color:var(--rc-mut)}",
+    ".rc-aviso{padding:14px 32px 18px;font-size:0.7em;line-height:1.5;color:var(--rc-mut);opacity:.8}",
 
     "@media (max-width:560px){.rc{margin:20px auto}.rc-topo{padding:24px 20px 22px}.rc h3.rc-tit{font-size:1.438em}.rc-res{padding:22px 20px 4px}",
     ".rc-cap{padding:20px}.rc-cap-campos{grid-template-columns:1fr}",
