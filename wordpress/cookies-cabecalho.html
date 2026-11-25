@@ -1,0 +1,20 @@
+<!--
+  Aviso de cookies + Pixel da Meta para danielssouza.com.
+
+  ONDE COLAR: no <head> de todas as páginas, ANTES do código do Google Tag Manager (GTM-WW6QT57F)
+  e do Site Kit. Use o mesmo lugar onde o código do GTM foi colado (plugin de cabeçalho, tema ou
+  Elementor > Código personalizado), com prioridade maior/posição acima dele.
+
+  O que faz:
+  1. Grava o padrão do modo de consentimento do Google: medição de audiência ativa; anúncios só com aceite.
+  2. Carrega o aviso de cookies e o Pixel da Meta (825543260422255). O Pixel só envia dados depois do "Aceitar".
+
+  Depois de colar: limpar o cache do LiteSpeed. Para reabrir o aviso, qualquer link para "#cookies"
+  (ex.: "Preferências de cookies" no rodapé).
+-->
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+(function(){var ok=false;try{var v=JSON.parse(localStorage.getItem("dsouza_cookies")||"null");ok=!!(v&&v.e==="aceito"&&Date.now()-v.t<31536e6);}catch(e){}
+var a=ok?"granted":"denied";gtag("consent","default",{ad_storage:a,ad_user_data:a,ad_personalization:a,analytics_storage:"granted",functionality_storage:"granted",security_storage:"granted",wait_for_update:500});gtag("set","ads_data_redaction",!ok);})();
+</script>
+<script src="https://danielsouza-adv.github.io/rise-consulta/cookies.js?v=1" data-pixel="825543260422255" defer></script>
