@@ -54,19 +54,32 @@
     try { window.dataLayer.push({ event: "cookies_escolha", cookies_anuncios: a }); } catch (x) {}
   }
 
+  // O tema do site usa !important em button/p/a; por isso todas as regras do aviso também levam !important.
+  var FONTE = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif";
   var CSS =
-    "#dsz-ck{position:fixed;left:16px;right:16px;bottom:16px;z-index:2147483000;max-width:680px;margin:0 auto;" +
+    "#dsz-ck{position:fixed;left:16px;right:16px;bottom:16px;top:auto;z-index:2147483000;width:auto;max-width:680px;margin:0 auto;" +
     "box-sizing:border-box;padding:18px 20px;background:#111;color:#f2f2f2;border:1px solid #2a2a2a;border-top:3px solid #c8a96e;" +
-    "border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.35);font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}" +
-    "#dsz-ck p{margin:0 0 14px;color:#f2f2f2;font:inherit}" +
-    "#dsz-ck a{color:#e8cc7a;text-decoration:underline}" +
-    "#dsz-ck .dsz-bt{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}" +
-    "#dsz-ck button{all:unset;box-sizing:border-box;cursor:pointer;min-width:132px;text-align:center;padding:10px 18px;border-radius:6px;" +
-    "font:600 14px/1.2 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}" +
+    "border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.35);font-family:" + FONTE + ";font-size:14px;line-height:1.5;text-align:left}" +
+    "#dsz-ck p{margin:0 0 14px;padding:0;color:#f2f2f2;font-family:" + FONTE + ";font-size:14px;font-weight:400;line-height:1.5;" +
+    "letter-spacing:normal;text-align:left;text-transform:none}" +
+    "#dsz-ck a{color:#e8cc7a;text-decoration:underline;font-size:inherit;font-weight:inherit}" +
+    "#dsz-ck .dsz-bt{display:flex;flex-direction:row;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin:0;padding:0}" +
+    "#dsz-ck button{appearance:none;-webkit-appearance:none;display:inline-block;box-sizing:border-box;cursor:pointer;" +
+    "width:auto;min-width:132px;height:auto;min-height:0;margin:0;padding:10px 18px;border-radius:6px;box-shadow:none;" +
+    "text-align:center;text-transform:none;letter-spacing:normal;text-decoration:none;transition:none;" +
+    "font-family:" + FONTE + ";font-size:14px;font-weight:600;line-height:1.2}" +
     "#dsz-ck button:focus-visible{outline:2px solid #e8cc7a;outline-offset:2px}" +
-    "#dsz-ck .dsz-nao{border:1px solid #c8a96e;color:#e8cc7a}" +
-    "#dsz-ck .dsz-sim{background:#c8a96e;color:#111;border:1px solid #c8a96e}" +
-    "@media (max-width:480px){#dsz-ck{left:12px;right:12px;bottom:12px;padding:16px}#dsz-ck button{flex:1 1 0;min-width:0}}";
+    "#dsz-ck button.dsz-nao{background:transparent;border:1px solid #c8a96e;color:#e8cc7a}" +
+    "#dsz-ck button.dsz-sim{background:#c8a96e;border:1px solid #c8a96e;color:#111}" +
+    "#dsz-ck button.dsz-nao:hover{background:rgba(200,169,110,.12);color:#e8cc7a}" +
+    "#dsz-ck button.dsz-sim:hover{background:#d6b97f;border-color:#d6b97f;color:#111}" +
+    "@media (max-width:480px){#dsz-ck{left:12px;right:12px;bottom:12px;padding:16px}" +
+    "#dsz-ck button{flex:1 1 0;min-width:0}}";
+  // acrescenta !important a cada declaração (só os blocos internos, sem mexer em seletores e @media)
+  CSS = CSS.replace(/\{([^{}]*)\}/g, function (m, corpo) {
+    return "{" + corpo.split(";").filter(function (d) { return d.trim(); })
+      .map(function (d) { return d + " !important"; }).join(";") + "}";
+  });
 
   var caixa = null;
   function fechar() { if (caixa && caixa.parentNode) caixa.parentNode.removeChild(caixa); caixa = null; }
