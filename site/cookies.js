@@ -6,8 +6,13 @@
  *   antes do GTM e do gtag; este arquivo só atualiza depois da escolha.
  * - Meta: o Pixel guarda os eventos numa fila e o script da Meta só carrega depois do aceite.
  * - A escolha fica no navegador por 12 meses. Qualquer link para "#cookies" (ou com data-cookies) reabre o aviso.
+ * - Posição: rodapé no computador, TOPO em telas até 820px. No celular o rodapé é onde ficam os
+ *   controles que convertem (o botão "Consultar" no site, a barra fixa na LP), e o aviso os cobria.
  *
- * Uso: <script src=".../cookies.js?v=1" data-pixel="ID_DO_PIXEL" data-politica="URL" defer></script>
+ * Uso: <script src=".../cookies.js?v=2" data-pixel="ID_DO_PIXEL" data-politica="URL" defer></script>
+ * ATENÇÃO: ao mudar este arquivo, suba o ?v= em TODOS os pontos que o carregam — hoje
+ * wordpress/cookies-cabecalho.html (danielssouza.com) e rise-lp/index.html (rise.dssouza.com).
+ * Sem isso o GitHub Pages continua servindo a versão em cache.
  */
 (function () {
   if (window.dsouzaCookies) return;
@@ -73,7 +78,10 @@
     "#dsz-ck button.dsz-sim{background:#c8a96e;border:1px solid #c8a96e;color:#111}" +
     "#dsz-ck button.dsz-nao:hover{background:rgba(200,169,110,.12);color:#e8cc7a}" +
     "#dsz-ck button.dsz-sim:hover{background:#d6b97f;border-color:#d6b97f;color:#111}" +
-    "@media (max-width:480px){#dsz-ck{left:12px;right:12px;bottom:12px;padding:16px}" +
+    // No celular o aviso vai para o TOPO. No rodapé ele cobria o botão "Consultar" da ferramenta
+    // (danielssouza.com, depois que a consulta subiu para a primeira dobra) e a barra fixa de ações
+    // (rise.dssouza.com) — justamente para o visitante de primeira viagem, que é quem vem do anúncio.
+    "@media (max-width:820px){#dsz-ck{left:12px;right:12px;top:12px;bottom:auto;padding:16px}" +
     "#dsz-ck button{flex:1 1 0;min-width:0}}";
   // acrescenta !important a cada declaração (só os blocos internos, sem mexer em seletores e @media)
   CSS = CSS.replace(/\{([^{}]*)\}/g, function (m, corpo) {
