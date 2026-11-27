@@ -61,9 +61,18 @@
       <p class="pc-sub">Retorno em até 24 horas úteis, sem compromisso.</p>
     </div>
 
-    <p class="pc-nota">Consulta sem nenhum registro? O CEIS e o CNEP não alcançam a lista de
-    inidôneos do TCU, o SICAF nem os cadastros estaduais e municipais. Se a empresa vem sendo
-    barrada em pregão sem saber por quê, a resposta costuma estar fora desses dois.</p>
+    <aside class="pc-limpo">
+      <h3>Consultou, não apareceu nada, e a empresa continua sendo barrada?</h3>
+      <p>O CEIS e o CNEP são dois registros, não todos. Sanção estadual ou municipal, a lista de
+      inidôneos do TCU, pendência no SICAF e sanção recém-aplicada ainda não publicada não
+      aparecem nesta consulta.</p>
+      <p>E há o caso que mais pega empresa de ficha limpa: os efeitos de uma sanção aplicada a
+      sócio administrador, a empresa do mesmo grupo ou à antecessora, estendidos ao CNPJ que nunca
+      foi punido. O art. 160 da Lei 14.133 permite isso — e exige processo com contraditório, o
+      que significa que cabe defesa.</p>
+      <p>Descobrir qual é a barreira, e se ela se sustenta, é o mesmo trabalho.
+      <a href="#contato">Falar sobre um caso assim</a></p>
+    </aside>
 
   </div>
 </section>
@@ -106,8 +115,19 @@
 #pos-consulta .pc-btn:focus-visible{outline:2px solid #C8A96E;outline-offset:3px}
 #pos-consulta .pc-sub{margin:14px 0 0;font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.58)}
 
-#pos-consulta .pc-nota{margin:46px 0 0;padding-top:22px;border-top:1px solid rgba(200,169,110,.18);
-  font-size:15px;line-height:1.6;color:rgba(255,255,255,.55);max-width:68ch}
+/* Não é ressalva, é a segunda porta: empresa limpa no CEIS que mesmo assim é barrada.
+   Subordinada ao CTA principal — filete e link, nunca um segundo botão que dispute com ele. */
+#pos-consulta .pc-limpo{margin:48px 0 0;padding:26px 28px;border-left:2px solid #C8A96E;
+  background:rgba(255,255,255,.035)}
+#pos-consulta .pc-limpo h3{margin:0 0 12px;font-family:'Lora',Georgia,serif;font-size:18px;
+  line-height:1.4;font-weight:600;letter-spacing:0;color:rgba(255,255,255,.93)}
+#pos-consulta .pc-limpo p{margin:0 0 12px;font-size:16px;line-height:1.62;
+  color:rgba(255,255,255,.7)}
+#pos-consulta .pc-limpo p:last-child{margin-bottom:0}
+#pos-consulta .pc-limpo a{color:#C8A96E;text-decoration:underline;text-underline-offset:3px;
+  text-decoration-thickness:1px}
+#pos-consulta .pc-limpo a:hover{color:#E8CC7A}
+#pos-consulta .pc-limpo a:focus-visible{outline:2px solid #C8A96E;outline-offset:3px}
 
 @media (max-width:820px){
   #pos-consulta{padding:46px 16px}
@@ -119,7 +139,9 @@
   /* No celular a primeira frase não cabe numa linha; quebrar à força deixa "decisão." órfã. */
   #pos-consulta .pc-q2{display:inline}
   #pos-consulta .pc-btn{display:block;padding:16px 20px}
-  #pos-consulta .pc-nota{font-size:14.5px;margin-top:38px}
+  #pos-consulta .pc-limpo{margin-top:40px;padding:22px 20px}
+  #pos-consulta .pc-limpo h3{font-size:17px}
+  #pos-consulta .pc-limpo p{font-size:15.5px}
 }
 @media (prefers-reduced-motion:reduce){
   #pos-consulta .pc-btn{transition:none}
