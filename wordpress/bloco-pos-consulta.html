@@ -1,0 +1,149 @@
+<!-- Seção que recebe quem acabou de consultar. Vai num widget HTML do Elementor, em largura
+     total, IMEDIATAMENTE depois do bloco da consulta e antes da seção clara dos cadastros.
+
+     ATENÇÃO, mesmo cuidado do bloco-faq: cole num widget HTML dentro de uma seção LIMPA do
+     Elementor, sem plano de fundo e sem padding definidos na seção. Se a seção do Elementor
+     tiver fundo próprio, ele vence o do bloco e a seção sai clara.
+
+     Substitui o conjunto "Encontrou uma sanção? Solicite agora análise do caso e volte a
+     licitar o quanto antes!" + caixa em itálico + botão. Aquele texto prometia resultado
+     ("volte a licitar"), o que o Provimento 205 não permite; aqui a mesma urgência vem do
+     custo da espera, que é fato, e não de um resultado garantido.
+
+     Âncora do botão: #contato (formulário do bloco-oferta). -->
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap">
+
+<section id="pos-consulta">
+  <div class="pc-wrap">
+
+    <p class="pc-eyebrow">Depois da consulta</p>
+
+    <h2 class="pc-h2">
+      O cadastro mostra o registro.
+      <span>A sua margem está no ato punitivo.</span>
+    </h2>
+
+    <p class="pc-lead">Nem o CEIS nem o CNEP dizem onde a sanção de fato impede, nem a partir de
+    quando a reabilitação pode ser pedida. Essa resposta está no ato que aplicou a penalidade e no
+    processo que o originou. É o que o Parecer de Elegibilidade vai ler, para responder três
+    perguntas.</p>
+
+    <div class="pc-itens">
+
+      <div class="pc-item">
+        <h3>Onde a empresa ainda pode licitar hoje</h3>
+        <p>Boa parte das sanções da Lei 14.133 vale apenas perante o ente que as aplicou — a União,
+        aquele estado ou aquele município. Saber o alcance exato é o que separa o edital que ainda
+        dá para disputar do que não dá.</p>
+      </div>
+
+      <div class="pc-item">
+        <h3>A partir de que data cabe pedir a reabilitação</h3>
+        <p>A lei permite o pedido antes do fim do prazo, cumpridos os requisitos do art. 163. A data
+        depende do tipo da sanção e de quando ela começou a valer.</p>
+      </div>
+
+      <div class="pc-item">
+        <h3>O que falta cumprir até lá</h3>
+        <p>Os requisitos legais, um a um: o que já está atendido, o que falta e em que ordem. E, se
+        o prazo venceu e o registro continua no cadastro, o caminho para pedir a baixa.</p>
+      </div>
+
+    </div>
+
+    <p class="pc-quote">Esperar o prazo acabar também é uma decisão.
+    <span class="pc-q2">E ela tem preço.</span></p>
+
+    <div class="pc-acao">
+      <a class="pc-btn" href="#contato">Pedir análise do caso</a>
+      <p class="pc-sub">Retorno em até 24 horas úteis, sem compromisso.</p>
+    </div>
+
+    <aside class="pc-limpo">
+      <h3>Consultou, não apareceu nada, e a empresa continua sendo barrada?</h3>
+      <p>O CEIS e o CNEP são dois registros, não todos. Sanção estadual ou municipal, a lista de
+      inidôneos do TCU, pendência no SICAF e sanção recém-aplicada ainda não publicada não
+      aparecem nesta consulta.</p>
+      <p>E há o caso que mais pega empresa de ficha limpa: os efeitos de uma sanção aplicada a
+      sócio administrador, a empresa do mesmo grupo ou à antecessora, estendidos ao CNPJ que nunca
+      foi punido. O art. 160 da Lei 14.133 permite isso — e exige processo com contraditório, o
+      que significa que cabe defesa.</p>
+      <p>Descobrir qual é a barreira, e se ela se sustenta, é o mesmo trabalho.
+      <a href="#contato">Falar sobre um caso assim</a></p>
+    </aside>
+
+  </div>
+</section>
+
+<style>
+#pos-consulta{background:#000;font-family:'Lora',Georgia,serif;color:rgba(255,255,255,.84);
+  padding:62px 20px;font-variant-numeric:lining-nums tabular-nums;-webkit-font-smoothing:antialiased}
+#pos-consulta *{box-sizing:border-box}
+#pos-consulta .pc-wrap{max-width:840px;margin:0 auto}
+
+#pos-consulta .pc-eyebrow{font-family:'DM Mono',ui-monospace,monospace;font-size:12.5px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;color:#C8A96E;margin:0 0 12px}
+
+#pos-consulta .pc-h2{font-family:'Playfair Display','Palatino Linotype',Georgia,serif;font-size:34px;
+  line-height:1.2;font-weight:700;margin:0 0 22px;color:#fff;letter-spacing:0}
+#pos-consulta .pc-h2 span{display:block;font-style:italic;color:#C8A96E}
+
+#pos-consulta .pc-lead{margin:0 0 34px;font-size:18px;line-height:1.62;color:rgba(255,255,255,.78);
+  max-width:66ch}
+
+#pos-consulta .pc-item{border-top:1px solid rgba(200,169,110,.3);padding:20px 0}
+#pos-consulta .pc-itens .pc-item:last-child{border-bottom:1px solid rgba(200,169,110,.3)}
+#pos-consulta .pc-item h3{margin:0 0 7px;font-family:'Lora',Georgia,serif;font-size:18.5px;
+  line-height:1.4;font-weight:600;letter-spacing:0;color:rgba(255,255,255,.93)}
+#pos-consulta .pc-item p{margin:0;font-size:17px;line-height:1.65;color:rgba(255,255,255,.72);
+  max-width:64ch}
+
+#pos-consulta .pc-quote{font-family:'Playfair Display','Palatino Linotype',Georgia,serif;
+  font-style:italic;font-weight:700;font-size:25px;line-height:1.35;color:#C8A96E;
+  text-align:center;margin:46px auto 34px;max-width:600px}
+#pos-consulta .pc-q2{display:block}
+
+#pos-consulta .pc-acao{text-align:center}
+#pos-consulta .pc-btn{display:inline-block;background:#C8A96E;color:#000!important;
+  border:1px solid #C8A96E;padding:16px 38px;font-family:'DM Mono',ui-monospace,monospace;
+  font-size:13px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;
+  border-radius:0;transition:background .18s ease,border-color .18s ease}
+#pos-consulta .pc-btn:hover,#pos-consulta .pc-btn:focus{background:#E8CC7A;border-color:#E8CC7A;
+  color:#000!important}
+#pos-consulta .pc-btn:focus-visible{outline:2px solid #C8A96E;outline-offset:3px}
+#pos-consulta .pc-sub{margin:14px 0 0;font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.58)}
+
+/* Não é ressalva, é a segunda porta: empresa limpa no CEIS que mesmo assim é barrada.
+   Subordinada ao CTA principal — filete e link, nunca um segundo botão que dispute com ele. */
+#pos-consulta .pc-limpo{margin:48px 0 0;padding:26px 28px;border-left:2px solid #C8A96E;
+  background:rgba(255,255,255,.035)}
+#pos-consulta .pc-limpo h3{margin:0 0 12px;font-family:'Lora',Georgia,serif;font-size:18px;
+  line-height:1.4;font-weight:600;letter-spacing:0;color:rgba(255,255,255,.93)}
+#pos-consulta .pc-limpo p{margin:0 0 12px;font-size:16px;line-height:1.62;
+  color:rgba(255,255,255,.7)}
+#pos-consulta .pc-limpo p:last-child{margin-bottom:0}
+#pos-consulta .pc-limpo a{color:#C8A96E;text-decoration:underline;text-underline-offset:3px;
+  text-decoration-thickness:1px}
+#pos-consulta .pc-limpo a:hover{color:#E8CC7A}
+#pos-consulta .pc-limpo a:focus-visible{outline:2px solid #C8A96E;outline-offset:3px}
+
+@media (max-width:820px){
+  #pos-consulta{padding:46px 16px}
+  #pos-consulta .pc-h2{font-size:27px}
+  #pos-consulta .pc-lead{font-size:17px;margin-bottom:28px}
+  #pos-consulta .pc-item h3{font-size:17.5px}
+  #pos-consulta .pc-item p{font-size:16px}
+  #pos-consulta .pc-quote{font-size:21px;margin:38px auto 30px}
+  /* No celular a primeira frase não cabe numa linha; quebrar à força deixa "decisão." órfã. */
+  #pos-consulta .pc-q2{display:inline}
+  #pos-consulta .pc-btn{display:block;padding:16px 20px}
+  #pos-consulta .pc-limpo{margin-top:40px;padding:22px 20px}
+  #pos-consulta .pc-limpo h3{font-size:17px}
+  #pos-consulta .pc-limpo p{font-size:15.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  #pos-consulta .pc-btn{transition:none}
+}
+</style>
