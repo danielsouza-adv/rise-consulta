@@ -9,10 +9,14 @@
  * - Posição: rodapé no computador, TOPO em telas até 820px. No celular o rodapé é onde ficam os
  *   controles que convertem (o botão "Consultar" no site, a barra fixa na LP), e o aviso os cobria.
  *
- * Uso: <script src=".../cookies.js?v=2" data-pixel="ID_DO_PIXEL" data-politica="URL" defer></script>
- * ATENÇÃO: ao mudar este arquivo, suba o ?v= em TODOS os pontos que o carregam — hoje
- * wordpress/cookies-cabecalho.html (danielssouza.com) e rise-lp/index.html (rise.dssouza.com).
- * Sem isso o GitHub Pages continua servindo a versão em cache.
+ * Uso: <script src=".../cookies.js" data-pixel="ID_DO_PIXEL" data-politica="URL" defer></script>
+ *
+ * SEM "?v=" de propósito. O cache-buster manual parecia mais seguro e era o contrário: em
+ * 27/11/2026 um deploy do Pages falhou sem avisar, o navegador pediu "?v=2", recebeu o arquivo
+ * ANTIGO e guardou aquilo em cache sob a URL nova. A versão foi queimada enquanto o conteúdo
+ * ainda era o velho, e a correção ficou invisível para quem tinha aberto a página na janela da
+ * falha. Além disso, cada mudança aqui obrigava a recolar o bloco no WordPress à mão.
+ * Sem query, o Pages serve com cache curto e a mudança chega sozinha em poucos minutos.
  */
 (function () {
   if (window.dsouzaCookies) return;
